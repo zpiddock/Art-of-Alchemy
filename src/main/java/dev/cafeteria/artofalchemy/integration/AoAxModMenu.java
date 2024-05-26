@@ -13,6 +13,6 @@ public class AoAxModMenu implements ModMenuApi {
 
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return screen -> AutoConfig.getConfigScreen(AoAConfig.class, screen).get();
+		return parent -> AutoConfig.getConfigScreen(AoAConfig.class, parent).get();
 	}
 }

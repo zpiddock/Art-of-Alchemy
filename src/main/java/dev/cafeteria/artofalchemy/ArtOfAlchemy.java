@@ -1,5 +1,9 @@
 package dev.cafeteria.artofalchemy;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +23,6 @@ import dev.cafeteria.artofalchemy.util.AoATags;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -32,8 +35,13 @@ public class ArtOfAlchemy implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger(ArtOfAlchemy.MOD_NAME);
 
-	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroupBuilder.create(ArtOfAlchemy.id("alchemy"))
-		.icon(() -> new ItemStack(AoAItems.MYSTERIOUS_SIGIL)).build();
+	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroup.builder()
+		.icon(() -> new ItemStack(AoAItems.MYSTERIOUS_SIGIL))
+			.displayName(Text.translatable("itemGroup.artofalchemy.alchemy"))
+			.entries(((displayContext, entries) -> {
+//				entries.add(CustomeItems);
+			}))
+			.build();
 
 	public static Identifier id(final String name) {
 		return new Identifier(ArtOfAlchemy.MOD_ID, name);
@@ -50,7 +58,7 @@ public class ArtOfAlchemy implements ModInitializer {
 			"Humankind cannot gain anything without first giving something in return. "
 				+ "To obtain, something of equal value must be lost."
 		);
-
+		Registry.register(Registries.ITEM_GROUP, id("alchemy"), ALCHEMY_GROUP);
 		AoATags.init();
 		AutoConfig.register(AoAConfig.class, GsonConfigSerializer::new);
 		AoAEssentia.registerEssentia();

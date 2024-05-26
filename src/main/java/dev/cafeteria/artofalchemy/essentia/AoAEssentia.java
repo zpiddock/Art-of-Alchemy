@@ -1,7 +1,7 @@
 package dev.cafeteria.artofalchemy.essentia;
 
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class AoAEssentia {
 

@@ -6,16 +6,16 @@ import com.mojang.serialization.Lifecycle;
 
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.mixin.RegistryAccessor;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
 
 public class RegistryEssentia extends SimpleRegistry<Essentia> {
 
 	public static final RegistryKey<Registry<Essentia>> KEY = RegistryKey.ofRegistry(ArtOfAlchemy.id("essentia"));
-	public static final RegistryEssentia INSTANCE = RegistryAccessor
-		.create(RegistryEssentia.KEY, new RegistryEssentia(), null, Lifecycle.stable());
+	public static final RegistryEssentia INSTANCE = FabricRegistryBuilder.from(new RegistryEssentia()).buildAndRegister();
 
 	public RegistryEssentia() {
 		super(RegistryEssentia.KEY, Lifecycle.stable());
