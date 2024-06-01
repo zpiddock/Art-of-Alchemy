@@ -18,7 +18,7 @@ public class RegistryEssentia extends SimpleRegistry<Essentia> {
 		.create(RegistryEssentia.KEY, new RegistryEssentia(), null, Lifecycle.stable());
 
 	public RegistryEssentia() {
-		super(RegistryEssentia.KEY, Lifecycle.stable());
+		super(RegistryEssentia.KEY, Lifecycle.stable(), null);
 	}
 
 	public void forEach(final BiConsumer<Essentia, Identifier> function) {

@@ -11,6 +11,7 @@ import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -18,7 +19,7 @@ public class WEssentiaSubPanel extends WPlainPanel {
 
 	private static class EssentiaLabel extends WLabel {
 
-		public EssentiaLabel(final String text) {
+		public EssentiaLabel(final Text text) {
 			super(text);
 		}
 
@@ -49,15 +50,15 @@ public class WEssentiaSubPanel extends WPlainPanel {
 
 	}
 
-	private static final Identifier SYMBOLS_EMPTY = new Identifier(ArtOfAlchemy.MOD_ID, "textures/gui/symbols/empty.png");
+	private static final Identifier SYMBOLS_EMPTY = ArtOfAlchemy.id("textures/gui/symbols/empty.png");
 	private Essentia essentia = null;
 	private Integer amount = 0;
 	private final WSprite bg = new EssentiaSprite(ArtOfAlchemy.id("textures/gui/essentia_banner.png"));
 	private final WSprite sprite = new EssentiaSprite(WEssentiaSubPanel.SYMBOLS_EMPTY);
 
-	private final WLabel amtLabel = new EssentiaLabel("0");
+	private final WLabel amtLabel = new EssentiaLabel(Text.of("0"));
 
-	private final WLabel typeLabel = new EssentiaLabel("Empty");
+	private final WLabel typeLabel = new EssentiaLabel(Text.of("Empty"));
 
 	public WEssentiaSubPanel() {
 		this.bg.setParent(this);

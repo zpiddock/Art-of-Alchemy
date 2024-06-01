@@ -5,6 +5,7 @@ import dev.cafeteria.artofalchemy.item.AoAItems;
 import dev.cafeteria.artofalchemy.item.ItemAlchemyFormula;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContext;

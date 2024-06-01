@@ -1,12 +1,5 @@
 package dev.cafeteria.artofalchemy.block;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityPipe;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityPipe.IOFace;
 import dev.cafeteria.artofalchemy.item.AoAItems;
@@ -16,12 +9,8 @@ import dev.cafeteria.artofalchemy.transport.EssentiaNetwork;
 import dev.cafeteria.artofalchemy.transport.EssentiaNetworker;
 import dev.cafeteria.artofalchemy.transport.NetworkElement;
 import dev.cafeteria.artofalchemy.transport.NetworkNode;
-import net.fabricmc.fabric.api.tag.TagFactory;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
-import net.minecraft.block.ShapeContext;
+import dev.cafeteria.artofalchemy.util.AoATags;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
@@ -41,6 +30,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+
+import java.util.*;
 
 public class BlockPipe extends Block implements NetworkElement, BlockEntityProvider {
 
@@ -302,7 +293,7 @@ public class BlockPipe extends Block implements NetworkElement, BlockEntityProvi
 			}
 			return ActionResult.SUCCESS;
 		}
-		if (TagFactory.ITEM.create(ArtOfAlchemy.id("usable_on_pipes")).contains(heldStack.getItem())) {
+		if (heldStack.isIn(AoATags.USABLE_ON_PIPES)) {
 			return ActionResult.PASS;
 		}
 		final Set<BlockPos> oldConnections = this.getConnections(world, pos);

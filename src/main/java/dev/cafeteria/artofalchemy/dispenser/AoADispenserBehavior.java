@@ -26,7 +26,7 @@ public class AoADispenserBehavior {
 		final BlockEntity be = pointer.getWorld().getBlockEntity(pointer.getPos().offset(facing));
 		if (be instanceof HasAlkahest) {
 			final boolean successful = ((HasAlkahest) be).addAlkahest(1000);
-			if (successful) {
+			if (successful && be.getWorld() != null) {
 				be.getWorld().playSound(null, be.getPos(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return new ItemStack(Items.BUCKET);
 			}

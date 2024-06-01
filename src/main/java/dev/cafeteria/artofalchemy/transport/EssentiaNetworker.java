@@ -38,7 +38,7 @@ public class EssentiaNetworker extends PersistentState {
 	}
 
 	public static String getName(final DimensionType dimension) {
-		return "essentia" + dimension.getSuffix();
+		return "essentia" + dimension.toString();
 	}
 
 	public final int processingLimit;
@@ -61,7 +61,7 @@ public class EssentiaNetworker extends PersistentState {
 	public void add(final BlockPos pos) {
 		this.processed++;
 		this.orphans.remove(pos);
-		if (!this.getNetwork(pos).isPresent()) {
+		if (this.getNetwork(pos).isEmpty()) {
 			// Otherwise, add it to any connected networks, creating a new one or merging if
 			// necessary
 			final EssentiaNetwork network = this.merge(this.getConnectedNetworks(pos).toArray(new EssentiaNetwork[0]));
@@ -132,7 +132,7 @@ public class EssentiaNetworker extends PersistentState {
 	public void readNbt(final NbtCompound tag) {
 		final NbtList networkList = tag.getList("networks", NbtType.LIST);
 		for (final NbtElement networkTag : networkList) {
-			if ((networkTag instanceof NbtList) && (((NbtList) networkTag).size() > 0)) {
+			if ((networkTag instanceof NbtList) && !((NbtList) networkTag).isEmpty()) {
 				this.networks.add(new EssentiaNetwork(this.world, (NbtList) networkTag));
 			}
 		}
@@ -165,7 +165,8 @@ public class EssentiaNetworker extends PersistentState {
 	@Deprecated
 	public void recursiveAdd(final BlockPos pos) {
 		if (this.processed < this.processingLimit) {
-			if (!this.getNetwork(pos).isPresent()) {
+			// Empty check previously
+			if (this.getNetwork(pos).isEmpty()) {
 				this.add(pos.toImmutable());
 				this.legacyOrphans.remove(pos);
 				final Set<BlockPos> connections = this.getConnections(pos);
@@ -176,7 +177,7 @@ public class EssentiaNetworker extends PersistentState {
 			ArtOfAlchemy.log(
 				Level.WARN,
 				"Reached essentia network processing limit at [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "] in "
-					+ this.world.getDimension().getSuffix()
+					+ this.world.getDimension().toString()
 			);
 		}
 	}

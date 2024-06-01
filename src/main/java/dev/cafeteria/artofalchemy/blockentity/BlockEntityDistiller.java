@@ -9,15 +9,15 @@ import dev.cafeteria.artofalchemy.item.AoAItems;
 import dev.cafeteria.artofalchemy.transport.HasAlkahest;
 import dev.cafeteria.artofalchemy.transport.HasEssentia;
 import dev.cafeteria.artofalchemy.util.AoAHelper;
+import dev.cafeteria.artofalchemy.util.AoATags;
 import dev.cafeteria.artofalchemy.util.FuelHelper;
 import dev.cafeteria.artofalchemy.util.ImplementedInventory;
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -28,7 +28,10 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -39,11 +42,11 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation") // Experimental API
 public class BlockEntityDistiller extends BlockEntity
-	implements ImplementedInventory, BlockEntityTicker<BlockEntityDistiller>, PropertyDelegateHolder,
-	BlockEntityClientSerializable, HasEssentia, HasAlkahest, SidedInventory, ExtendedScreenHandlerFactory {
+	implements ImplementedInventory, BlockEntityTicker<BlockEntityDistiller>, PropertyDelegateHolder, HasEssentia, HasAlkahest, SidedInventory, ExtendedScreenHandlerFactory {
 
 	private static final int[] TOP_SLOTS = {
 		0
@@ -83,25 +86,17 @@ public class BlockEntityDistiller extends BlockEntity
 	protected final PropertyDelegate delegate = new PropertyDelegate() {
 		@Override
 		public int get(final int index) {
-			switch (index) {
-				case 0:
-					return BlockEntityDistiller.this.progress;
-				case 1:
-					return BlockEntityDistiller.PROGRESS_MAX;
-				case 2:
-					return BlockEntityDistiller.this.fuel;
-				case 3:
-					return 20; // Fuel
-											// Indicator
-				case 4:
-					return BlockEntityDistiller.this.essentia;
-				case 5:
-					return (int) ((BlockEntityDistiller.this.getAlkahest() / FluidConstants.BUCKET) * 1000);
-				case 6:
-					return (int) ((BlockEntityDistiller.this.getAlkahestCapacity() / FluidConstants.BUCKET) * 1000);
-				default:
-					return 0;
-			}
+            return switch (index) {
+                case 0 -> BlockEntityDistiller.this.progress;
+                case 1 -> BlockEntityDistiller.PROGRESS_MAX;
+                case 2 -> BlockEntityDistiller.this.fuel;
+                case 3 -> 20; // Fuel
+                // Indicator
+                case 4 -> BlockEntityDistiller.this.essentia;
+                case 5 -> (int) ((BlockEntityDistiller.this.getAlkahest() / FluidConstants.BUCKET) * 1000);
+                case 6 -> (int) ((BlockEntityDistiller.this.getAlkahestCapacity() / FluidConstants.BUCKET) * 1000);
+                default -> 0;
+            };
 		}
 
 		@Override
@@ -133,7 +128,7 @@ public class BlockEntityDistiller extends BlockEntity
 	@Override
 	public boolean canExtract(final int slot, final ItemStack stack, final Direction dir) {
 		if (dir == Direction.DOWN) {
-			return TagFactory.ITEM.create(ArtOfAlchemy.id("containers")).contains(stack.getItem());
+			return stack.isIn(AoATags.CONTAINERS);
 		} else {
 			return true;
 		}
@@ -161,9 +156,10 @@ public class BlockEntityDistiller extends BlockEntity
 		this.updateEssentiaTankSize();
 	}
 
+	@Nullable
 	@Override
-	public void fromClientTag(final NbtCompound tag) {
-		this.readNbt(tag);
+	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
 	}
 
 	@Override
@@ -266,14 +262,11 @@ public class BlockEntityDistiller extends BlockEntity
 
 	@Override
 	public boolean isValid(final int slot, final ItemStack stack) {
-		switch (slot) {
-			case 0:
-				return stack.isOf(AoAItems.AZOTH);
-			case 1:
-				return FuelHelper.isFuel(stack);
-			default:
-				return false;
-		}
+        return switch (slot) {
+            case 0 -> stack.isOf(AoAItems.AZOTH);
+            case 1 -> FuelHelper.isFuel(stack);
+            default -> false;
+        };
 	}
 
 	@Override
@@ -300,11 +293,10 @@ public class BlockEntityDistiller extends BlockEntity
 		this.updateLit();
 	}
 
-	@Override
 	public void sync() {
 		// AoANetworking.sendEssentiaPacket(world, pos, 0, essentiaInput); // KG: Is
 		// this needed?
-		BlockEntityClientSerializable.super.sync();
+		world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), Block.NOTIFY_LISTENERS);
 	}
 
 	@Override
@@ -339,8 +331,8 @@ public class BlockEntityDistiller extends BlockEntity
 	}
 
 	@Override
-	public NbtCompound toClientTag(final NbtCompound tag) {
-		return this.writeNbt(tag);
+	public NbtCompound toInitialChunkDataNbt() {
+		return createNbt();
 	}
 
 	private void tryConvertEssentia() { // KG: Not clean, could have issues if this function is missed for a tick.
@@ -360,14 +352,14 @@ public class BlockEntityDistiller extends BlockEntity
 	}
 
 	@Override
-	public NbtCompound writeNbt(final NbtCompound tag) {
+	public void writeNbt(final NbtCompound tag) {
 		tag.putInt("progress", this.progress);
 		tag.putInt("fuel", this.fuel);
 		tag.putInt("essentia", this.essentia);
 		tag.putInt("alkahest", AoAHelper.mBFromFluid(this.getAlkahest())); // As mB mostly for legacy reasons
 		tag.put("essentiaInput", this.essentiaInput.writeNbt());
 		Inventories.writeNbt(tag, this.items);
-		return super.writeNbt(tag);
+		super.writeNbt(tag);
 	}
 
 	@Override
