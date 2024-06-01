@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class HandlerAnalyzer extends SyncedGuiDescription {
@@ -35,7 +35,7 @@ public class HandlerAnalyzer extends SyncedGuiDescription {
 		};
 
 		final WGridPanel panel = AoAHandlers.makePanel(this);
-		AoAHandlers.makeTitle(panel, new TranslatableText("block.artofalchemy.analysis_desk"));
+		AoAHandlers.makeTitle(panel, Text.translatable("block.artofalchemy.analysis_desk"));
 		AoAHandlers.addInventory(panel, this);
 		AoAHandlers.addBigOutput(panel, WItemSlot.outputOf(this.blockInventory, 3));
 

@@ -8,7 +8,7 @@ import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class HandlerCalcinator extends SyncedGuiDescription {
@@ -20,7 +20,7 @@ public class HandlerCalcinator extends SyncedGuiDescription {
 		);
 
 		final WGridPanel panel = AoAHandlers.makePanel(this);
-		AoAHandlers.makeTitle(panel, new TranslatableText("block.artofalchemy.calcination_furnace"));
+		AoAHandlers.makeTitle(panel, Text.translatable("block.artofalchemy.calcination_furnace"));
 		AoAHandlers.addInventory(panel, this);
 		AoAHandlers.addCentralProgressBar(panel, new Identifier(ArtOfAlchemy.MOD_ID, "textures/gui/progress_yellow.png"));
 		AoAHandlers.addBigOutput(panel, WItemSlot.outputOf(this.blockInventory, 2));

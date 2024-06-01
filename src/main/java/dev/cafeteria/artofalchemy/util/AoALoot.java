@@ -3,10 +3,9 @@ package dev.cafeteria.artofalchemy.util;
 import dev.cafeteria.artofalchemy.AoAConfig;
 import dev.cafeteria.artofalchemy.item.AoAItems;
 import dev.cafeteria.artofalchemy.item.ItemAlchemyFormula;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.entry.ItemEntry;
@@ -26,23 +25,24 @@ public class AoALoot {
 	public static void initialize() {
 		if (AoAConfig.get().formulaLoot) {
 			// Thanks, TheBrokenRail!
-			LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+			LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
 				if (AoALoot.isSelectedLootTable(id)) {
-					final FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-						.rolls(ConstantLootNumberProvider.create(1)).withEntry(ItemEntry.builder(AoAItems.ALCHEMY_FORMULA).build())
-						.withFunction(new LootFunction() {
-							@Override
-							public ItemStack apply(final ItemStack stack, final LootContext ctx) {
-								ItemAlchemyFormula.setFormula(stack, AoAItems.PHILOSOPHERS_STONE);
-								return stack;
-							}
+					final LootPool.Builder poolBuilder = LootPool.builder()
+							.rolls(ConstantLootNumberProvider.create(1))
+							.with(ItemEntry.builder(AoAItems.ALCHEMY_FORMULA).build())
+							.apply(new LootFunction() {
+								@Override
+								public ItemStack apply(final ItemStack stack, final LootContext ctx) {
+									ItemAlchemyFormula.setFormula(stack, AoAItems.PHILOSOPHERS_STONE);
+									return stack;
+								}
 
-							@Override
-							public LootFunctionType getType() {
-								return null;
-							}
-						});
-					supplier.withPool(poolBuilder.build());
+								@Override
+								public LootFunctionType getType() {
+									return null;
+								}
+							});
+					supplier.pool(poolBuilder.build());
 				}
 			});
 		}

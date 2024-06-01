@@ -32,7 +32,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -183,7 +182,7 @@ public class BlockEntityProjector extends BlockEntity
 
 	@Override
 	public Text getDisplayName() {
-		return new LiteralText("");
+		return Text.literal("");
 	}
 
 	@Override

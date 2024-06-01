@@ -1,8 +1,5 @@
 package dev.cafeteria.artofalchemy.item;
 
-import java.util.HashSet;
-import java.util.List;
-
 import dev.cafeteria.artofalchemy.AoAConfig;
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
@@ -20,15 +17,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.HashSet;
+import java.util.List;
 
 public class ItemEssentiaVessel extends Item {
 
@@ -125,17 +120,17 @@ public class ItemEssentiaVessel extends Item {
 		final String prefix = this.tooltipPrefix();
 
 		if (((ItemEssentiaVessel) stack.getItem()).type != null) {
-			tooltip.add(new TranslatableText(prefix + "deprecated").formatted(Formatting.DARK_RED));
+			tooltip.add(Text.translatable(prefix + "deprecated").formatted(Formatting.DARK_RED));
 		}
 
 		if (container.isInfinite()) {
-			tooltip.add(new TranslatableText(prefix + "infinite").formatted(Formatting.LIGHT_PURPLE));
+			tooltip.add(Text.translatable(prefix + "infinite").formatted(Formatting.LIGHT_PURPLE));
 			if (container.isWhitelistEnabled()) {
 				if (container.getWhitelist().isEmpty()) {
-					tooltip.add(new TranslatableText(prefix + "empty").formatted(Formatting.GRAY));
+					tooltip.add(Text.translatable(prefix + "empty").formatted(Formatting.GRAY));
 				} else {
 					for (final Essentia essentia : container.getWhitelist()) {
-						tooltip.add(new TranslatableText(prefix + "component_inf", essentia.getName()).formatted(Formatting.GOLD));
+						tooltip.add(Text.translatable(prefix + "component_inf", essentia.getName()).formatted(Formatting.GOLD));
 					}
 				}
 			}
@@ -144,18 +139,18 @@ public class ItemEssentiaVessel extends Item {
 			if (container.isWhitelistEnabled() && (container.getWhitelist().size() == 1)) {
 				for (final Essentia essentia : container.getWhitelist()) {
 					tooltip.add(
-						new TranslatableText(prefix + "single_unlim", essentia.getName(), container.getCount(essentia))
+						Text.translatable(prefix + "single_unlim", essentia.getName(), container.getCount(essentia))
 							.formatted(Formatting.GREEN)
 					);
 				}
 			} else if (container.isWhitelistEnabled() && container.getWhitelist().isEmpty()) {
-				tooltip.add(new TranslatableText(prefix + "empty").formatted(Formatting.GRAY));
+				tooltip.add(Text.translatable(prefix + "empty").formatted(Formatting.GRAY));
 			} else {
-				tooltip.add(new TranslatableText(prefix + "mixed_unlim", container.getCount()).formatted(Formatting.AQUA));
+				tooltip.add(Text.translatable(prefix + "mixed_unlim", container.getCount()).formatted(Formatting.AQUA));
 				for (final Essentia essentia : container.getContents().sortedList()) {
 					if ((container.getCount(essentia) != 0) && container.whitelisted(essentia)) {
 						tooltip.add(
-							new TranslatableText(prefix + "component", essentia.getName(), container.getCount(essentia))
+							Text.translatable(prefix + "component", essentia.getName(), container.getCount(essentia))
 								.formatted(Formatting.GOLD)
 						);
 					}
@@ -165,21 +160,21 @@ public class ItemEssentiaVessel extends Item {
 		} else if (container.isWhitelistEnabled() && (container.getWhitelist().size() == 1)) {
 			for (final Essentia essentia : container.getWhitelist()) {
 				tooltip.add(
-					new TranslatableText(
+					Text.translatable(
 						prefix + "single", essentia.getName(), container.getCount(essentia), container.getCapacity()
 					).formatted(Formatting.GREEN)
 				);
 			}
 		} else if (container.isWhitelistEnabled() && container.getWhitelist().isEmpty()) {
-			tooltip.add(new TranslatableText(prefix + "empty").formatted(Formatting.GRAY));
+			tooltip.add(Text.translatable(prefix + "empty").formatted(Formatting.GRAY));
 		} else {
 			tooltip.add(
-				new TranslatableText(prefix + "mixed", container.getCount(), container.getCapacity()).formatted(Formatting.AQUA)
+				Text.translatable(prefix + "mixed", container.getCount(), container.getCapacity()).formatted(Formatting.AQUA)
 			);
 			for (final Essentia essentia : container.getContents().sortedList()) {
 				if ((container.getCount(essentia) != 0) && container.whitelisted(essentia)) {
 					tooltip.add(
-						new TranslatableText(prefix + "component", essentia.getName(), container.getCount(essentia))
+						Text.translatable(prefix + "component", essentia.getName(), container.getCount(essentia))
 							.formatted(Formatting.GOLD)
 					);
 				}
@@ -187,11 +182,11 @@ public class ItemEssentiaVessel extends Item {
 		}
 
 		if (!container.isInput() && !container.isOutput()) {
-			tooltip.add(new TranslatableText(prefix + "locked").formatted(Formatting.RED));
+			tooltip.add(Text.translatable(prefix + "locked").formatted(Formatting.RED));
 		} else if (!container.isInput()) {
-			tooltip.add(new TranslatableText(prefix + "output").formatted(Formatting.RED));
+			tooltip.add(Text.translatable(prefix + "output").formatted(Formatting.RED));
 		} else if (!container.isOutput()) {
-			tooltip.add(new TranslatableText(prefix + "input").formatted(Formatting.RED));
+			tooltip.add(Text.translatable(prefix + "input").formatted(Formatting.RED));
 		}
 
 		super.appendTooltip(stack, world, tooltip, ctx);
@@ -235,22 +230,22 @@ public class ItemEssentiaVessel extends Item {
 			final EssentiaContainer container = ItemEssentiaVessel.getContainer(stack);
 			float pitch;
 			if (container.isInput() && container.isOutput()) {
-				user.sendMessage(new TranslatableText(this.tooltipPrefix() + "input"), true);
+				user.sendMessage(Text.translatable(this.tooltipPrefix() + "input"), true);
 				container.setInput(true);
 				container.setOutput(false);
 				pitch = 0.80f;
 			} else if (container.isInput() && !container.isOutput()) {
-				user.sendMessage(new TranslatableText(this.tooltipPrefix() + "output"), true);
+				user.sendMessage(Text.translatable(this.tooltipPrefix() + "output"), true);
 				container.setInput(false);
 				container.setOutput(true);
 				pitch = 0.95f;
 			} else if (!container.isInput() && container.isOutput()) {
-				user.sendMessage(new TranslatableText(this.tooltipPrefix() + "locked"), true);
+				user.sendMessage(Text.translatable(this.tooltipPrefix() + "locked"), true);
 				container.setInput(false);
 				container.setOutput(false);
 				pitch = 1.05f;
 			} else {
-				user.sendMessage(new TranslatableText(this.tooltipPrefix() + "unlocked"), true);
+				user.sendMessage(Text.translatable(this.tooltipPrefix() + "unlocked"), true);
 				container.setInput(true);
 				container.setOutput(true);
 				pitch = 0.65f;
@@ -272,9 +267,9 @@ public class ItemEssentiaVessel extends Item {
 
 		if (player != null) {
 			if (transferred > 0) {
-				player.sendMessage(new TranslatableText(this.tooltipPrefix() + "pulled", +transferred), true);
+				player.sendMessage(Text.translatable(this.tooltipPrefix() + "pulled", +transferred), true);
 			} else if (transferred < 0) {
-				player.sendMessage(new TranslatableText(this.tooltipPrefix() + "pushed", -transferred), true);
+				player.sendMessage(Text.translatable(this.tooltipPrefix() + "pushed", -transferred), true);
 			}
 		}
 

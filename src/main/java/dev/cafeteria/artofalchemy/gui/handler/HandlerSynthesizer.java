@@ -13,7 +13,7 @@ import io.github.cottonmc.cotton.gui.widget.WSprite;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -54,7 +54,7 @@ public class HandlerSynthesizer extends SyncedGuiDescription {
 		this.pos = ctx.get((world, pos) -> pos, null);
 
 		final WGridPanel panel = AoAHandlers.makePanel(this);
-		AoAHandlers.makeTitle(panel, new TranslatableText("block.artofalchemy.synthesis_table"));
+		AoAHandlers.makeTitle(panel, Text.translatable("block.artofalchemy.synthesis_table"));
 		AoAHandlers.addInventory(panel, this);
 		AoAHandlers.addCentralProgressBar(panel, new Identifier(ArtOfAlchemy.MOD_ID, "textures/gui/progress_cyan.png"));
 		AoAHandlers.addBigOutput(panel, WItemSlot.outputOf(this.blockInventory, 1));

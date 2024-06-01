@@ -15,7 +15,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -51,7 +50,7 @@ public class BlockAnalyzer extends Block implements ExtendedScreenHandlerFactory
 
 	@Override
 	public Text getDisplayName() {
-		return new LiteralText("");
+		return Text.literal("");
 	}
 
 	@Override

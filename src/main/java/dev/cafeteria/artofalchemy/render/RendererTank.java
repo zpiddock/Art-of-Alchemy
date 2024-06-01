@@ -37,7 +37,7 @@ public class RendererTank implements BlockEntityRenderer<BlockEntityTank> {
 		final Matrix4f model = matrices.peek().getPositionMatrix();
 		final Matrix3f normal = matrices.peek().getNormalMatrix();
 		VertexConsumer buffer;
-		if (this.client.options.graphicsMode == GraphicsMode.FABULOUS) {
+		if (this.client.options.getGraphicsMode().getValue() == GraphicsMode.FABULOUS) {
 			// Translucent-layer quads don't show up under Fabulous settings, so here's a
 			// hacky workaround :)
 			buffer = vertexConsumers.getBuffer(RenderLayer.getTranslucentMovingBlock());

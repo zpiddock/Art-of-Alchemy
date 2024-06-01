@@ -1,6 +1,6 @@
 package dev.cafeteria.artofalchemy.essentia;
 
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class Essentia {
@@ -15,9 +15,9 @@ public class Essentia {
 		return this.color;
 	}
 
-	public TranslatableText getName() {
+	public Text getName() {
 		final Identifier id = RegistryEssentia.INSTANCE.getId(this);
-		return new TranslatableText("essentia." + id.getNamespace() + "." + id.getPath());
+		return Text.translatable("essentia." + id.getNamespace() + "." + id.getPath());
 	}
 
 }

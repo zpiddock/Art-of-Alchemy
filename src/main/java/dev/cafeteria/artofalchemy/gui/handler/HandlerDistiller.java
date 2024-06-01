@@ -12,7 +12,7 @@ import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -42,7 +42,7 @@ public class HandlerDistiller extends SyncedGuiDescription {
 		this.pos = ctx.get((world, pos) -> pos, null);
 
 		final WGridPanel panel = AoAHandlers.makePanel(this);
-		AoAHandlers.makeTitle(panel, new TranslatableText("block.artofalchemy.distillation_apparatus"));
+		AoAHandlers.makeTitle(panel, Text.translatable("block.artofalchemy.distillation_apparatus"));
 		AoAHandlers.addInventory(panel, this);
 		AoAHandlers.addCentralProgressBar(panel, new Identifier(ArtOfAlchemy.MOD_ID, "textures/gui/progress_magenta.png"));
 

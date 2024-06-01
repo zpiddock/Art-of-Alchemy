@@ -1,7 +1,6 @@
 package dev.cafeteria.artofalchemy.blockentity;
 
 import dev.cafeteria.artofalchemy.AoAConfig;
-import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.block.BlockCalcinator;
 import dev.cafeteria.artofalchemy.gui.handler.HandlerCalcinator;
 import dev.cafeteria.artofalchemy.recipe.AoARecipes;
@@ -31,7 +30,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -209,7 +207,7 @@ public class BlockEntityCalcinator extends BlockEntity
 
 	@Override
 	public Text getDisplayName() {
-		return new LiteralText("");
+		return Text.literal("");
 	}
 
 	@Override

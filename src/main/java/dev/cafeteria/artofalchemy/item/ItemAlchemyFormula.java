@@ -1,7 +1,5 @@
 package dev.cafeteria.artofalchemy.item;
 
-import java.util.List;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
@@ -11,11 +9,12 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemAlchemyFormula extends AbstractItemFormula {
 
@@ -44,7 +43,7 @@ public class ItemAlchemyFormula extends AbstractItemFormula {
 		final ItemStack stack, final World world, final List<Text> tooltip, final TooltipContext ctx
 	) {
 		tooltip
-			.add(new TranslatableText(ItemAlchemyFormula.getFormula(stack).getTranslationKey()).formatted(Formatting.GRAY));
+			.add(Text.translatable(ItemAlchemyFormula.getFormula(stack).getTranslationKey()).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, ctx);
 	}
 

@@ -1,7 +1,5 @@
 package dev.cafeteria.artofalchemy.block;
 
-import java.util.Random;
-
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.fluid.AoAFluids;
 import net.fabricmc.api.EnvType;
@@ -13,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class BlockEssentia extends FluidBlock {

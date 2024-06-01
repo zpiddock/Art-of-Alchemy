@@ -20,7 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -31,7 +31,10 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class BlockPipe extends Block implements NetworkElement, BlockEntityProvider {
 
@@ -283,12 +286,11 @@ public class BlockPipe extends Block implements NetworkElement, BlockEntityProvi
 			if (!world.isClient()) {
 				final Optional<EssentiaNetwork> network = EssentiaNetworker.get((ServerWorld) world).getNetwork(pos);
 				if (network.isPresent()) {
-					player.sendSystemMessage(
-						new LiteralText(network.get().getUuid().toString() + " w/ " + network.get().getNodes().size() + " nodes"),
-						new UUID(0, 0)
+					player.sendMessage(
+						Text.literal(network.get().getUuid().toString() + " w/ " + network.get().getNodes().size() + " nodes")
 					);
 				} else {
-					player.sendSystemMessage(new LiteralText("no network"), new UUID(0, 0));
+					player.sendMessage(Text.literal("no network"));
 				}
 			}
 			return ActionResult.SUCCESS;

@@ -1,8 +1,5 @@
 package dev.cafeteria.artofalchemy.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.cafeteria.artofalchemy.gui.handler.HandlerJournal;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,15 +17,16 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemJournal extends AbstractItemFormula {
 
@@ -132,10 +130,10 @@ public class ItemJournal extends AbstractItemFormula {
 		final int entryCount = ItemJournal.getEntriesTag(stack) == null ? 0 : ItemJournal.getEntriesTag(stack).size();
 		if (ItemJournal.getFormula(stack) != Items.AIR) {
 			tooltip
-				.add(new TranslatableText(ItemJournal.getFormula(stack).getTranslationKey()).formatted(Formatting.DARK_PURPLE));
+				.add(Text.translatable(ItemJournal.getFormula(stack).getTranslationKey()).formatted(Formatting.DARK_PURPLE));
 		}
 		tooltip.add(
-			new TranslatableText("item.artofalchemy.alchemical_journal.tooltip_entries", entryCount)
+			Text.translatable("item.artofalchemy.alchemical_journal.tooltip_entries", entryCount)
 				.formatted(Formatting.GRAY)
 		);
 		super.appendTooltip(stack, world, tooltip, ctx);
@@ -152,7 +150,7 @@ public class ItemJournal extends AbstractItemFormula {
 
 				@Override
 				public Text getDisplayName() {
-					return new LiteralText("");
+					return Text.literal("");
 				}
 
 				@Override

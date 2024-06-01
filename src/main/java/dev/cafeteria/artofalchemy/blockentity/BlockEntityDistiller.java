@@ -1,7 +1,6 @@
 package dev.cafeteria.artofalchemy.blockentity;
 
 import dev.cafeteria.artofalchemy.AoAConfig;
-import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.block.BlockDissolver;
 import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import dev.cafeteria.artofalchemy.gui.handler.HandlerDistiller;
@@ -36,7 +35,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -199,7 +197,7 @@ public class BlockEntityDistiller extends BlockEntity
 
 	@Override
 	public Text getDisplayName() {
-		return new LiteralText("");
+		return Text.literal("");
 	}
 
 	public float getEfficiency() {

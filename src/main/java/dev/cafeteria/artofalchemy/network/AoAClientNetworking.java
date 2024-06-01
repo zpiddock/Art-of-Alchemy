@@ -9,9 +9,8 @@ import dev.cafeteria.artofalchemy.gui.screen.ScreenJournal;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -28,13 +27,13 @@ public class AoAClientNetworking {
 
 	@Environment(EnvType.CLIENT)
 	public static void initializeClientNetworking() {
-		ClientSidePacketRegistry.INSTANCE.register(AoANetworking.ESSENTIA_PACKET, (ctx, data) -> {
-			final int essentiaId = data.readInt();
-			final NbtCompound tag = data.readNbt();
-			final BlockPos pos = data.readBlockPos();
-			ctx.getTaskQueue().execute(() -> {
+		ClientPlayNetworking.registerGlobalReceiver(AoANetworking.ESSENTIA_PACKET, (client, handler, buffer, sender) -> {
+			final int essentiaId = buffer.readInt();
+			final NbtCompound tag = buffer.readNbt();
+			final BlockPos pos = buffer.readBlockPos();
+
+			client.execute(() -> {
 				final EssentiaContainer container = new EssentiaContainer(tag);
-				final MinecraftClient client = MinecraftClient.getInstance();
 				final Screen screen = client.currentScreen;
 				if (screen instanceof EssentiaScreen) {
 					((EssentiaScreen) screen).updateEssentia(essentiaId, container, pos);
@@ -42,15 +41,14 @@ public class AoAClientNetworking {
 			});
 		});
 
-		ClientSidePacketRegistry.INSTANCE.register(AoANetworking.ESSENTIA_PACKET_REQ, (ctx, data) -> {
-			final int essentiaId = data.readInt();
-			final NbtCompound essentiaTag = data.readNbt();
-			final NbtCompound requiredTag = data.readNbt();
-			final BlockPos pos = data.readBlockPos();
-			ctx.getTaskQueue().execute(() -> {
+		ClientPlayNetworking.registerGlobalReceiver(AoANetworking.ESSENTIA_PACKET_REQ, (client, handler, buffer, sender) -> {
+			final int essentiaId = buffer.readInt();
+			final NbtCompound essentiaTag = buffer.readNbt();
+			final NbtCompound requiredTag = buffer.readNbt();
+			final BlockPos pos = buffer.readBlockPos();
+			client.execute(() -> {
 				final EssentiaContainer container = new EssentiaContainer(essentiaTag);
 				final EssentiaStack required = new EssentiaStack(requiredTag);
-				final MinecraftClient client = MinecraftClient.getInstance();
 				final Screen screen = client.currentScreen;
 				if (screen instanceof EssentiaScreen) {
 					((EssentiaScreen) screen).updateEssentia(essentiaId, container, required, pos);
@@ -58,10 +56,9 @@ public class AoAClientNetworking {
 			});
 		});
 
-		ClientSidePacketRegistry.INSTANCE.register(AoANetworking.JOURNAL_REFRESH_PACKET, (ctx, data) -> {
-			final ItemStack journal = data.readItemStack();
-			ctx.getTaskQueue().execute(() -> {
-				final MinecraftClient client = MinecraftClient.getInstance();
+		ClientPlayNetworking.registerGlobalReceiver(AoANetworking.JOURNAL_REFRESH_PACKET, (client, handler, buffer, sender) -> {
+			final ItemStack journal = buffer.readItemStack();
+			client.execute(() -> {
 				final Screen screen = client.currentScreen;
 				if (screen instanceof ScreenJournal) {
 					((ScreenJournal) screen).refresh(journal);
@@ -69,12 +66,11 @@ public class AoAClientNetworking {
 			});
 		});
 
-		ClientSidePacketRegistry.INSTANCE.register(AoANetworking.PIPE_FACE_UPDATE, (ctx, data) -> {
-			final Direction dir = data.readEnumConstant(Direction.class);
-			final BlockEntityPipe.IOFace face = data.readEnumConstant(BlockEntityPipe.IOFace.class);
-			final BlockPos pos = data.readBlockPos();
-			ctx.getTaskQueue().execute(() -> {
-				final MinecraftClient client = MinecraftClient.getInstance();
+		ClientPlayNetworking.registerGlobalReceiver(AoANetworking.PIPE_FACE_UPDATE, (client, handler, buffer, sender) -> {
+			final Direction dir = buffer.readEnumConstant(Direction.class);
+			final BlockEntityPipe.IOFace face = buffer.readEnumConstant(BlockEntityPipe.IOFace.class);
+			final BlockPos pos = buffer.readBlockPos();
+			client.execute(() -> {
 				final World world = client.world;
 				final BlockEntity be = world.getBlockEntity(pos);
 				if (be instanceof BlockEntityPipe) {
@@ -89,7 +85,7 @@ public class AoAClientNetworking {
 		final PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 		data.writeIdentifier(id);
 		data.writeEnumConstant(hand);
-		ClientSidePacketRegistry.INSTANCE.sendToServer(AoANetworking.JOURNAL_SELECT_PACKET, data);
+		ClientPlayNetworking.send(AoANetworking.JOURNAL_SELECT_PACKET, data);
 	}
 
 }

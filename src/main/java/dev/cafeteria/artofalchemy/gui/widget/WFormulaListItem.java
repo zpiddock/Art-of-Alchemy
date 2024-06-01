@@ -1,8 +1,5 @@
 package dev.cafeteria.artofalchemy.gui.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.cafeteria.artofalchemy.gui.handler.AoAHandlers;
 import dev.cafeteria.artofalchemy.item.ItemJournal;
 import dev.cafeteria.artofalchemy.network.AoAClientNetworking;
@@ -15,9 +12,12 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WFormulaListItem extends WPlainPanel {
 
@@ -43,7 +43,7 @@ public class WFormulaListItem extends WPlainPanel {
 		this.add(this.formulaLabel, 16, 3);
 
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-			this.setButton = new WButton(new LiteralText("✔"));
+			this.setButton = new WButton(Text.literal("✔"));
 			this.setButton.setAlignment(HorizontalAlignment.CENTER);
 			this.setButton.setParent(this);
 			this.add(this.setButton, (8 * AoAHandlers.BASIS) - 8, -4, AoAHandlers.BASIS + 2, AoAHandlers.BASIS + 2);

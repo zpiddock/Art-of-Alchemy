@@ -1,31 +1,22 @@
 package dev.cafeteria.artofalchemy.gui.handler;
 
-import java.lang.reflect.InvocationTargetException;
-
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
-import dev.cafeteria.artofalchemy.block.BlockAnalyzer;
-import dev.cafeteria.artofalchemy.block.BlockCalcinator;
-import dev.cafeteria.artofalchemy.block.BlockDissolver;
-import dev.cafeteria.artofalchemy.block.BlockDistiller;
-import dev.cafeteria.artofalchemy.block.BlockProjector;
-import dev.cafeteria.artofalchemy.block.BlockSynthesizer;
+import dev.cafeteria.artofalchemy.block.*;
 import dev.cafeteria.artofalchemy.item.ItemJournal;
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
-import io.github.cottonmc.cotton.gui.widget.WBar;
+import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.WBar.Direction;
-import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import io.github.cottonmc.cotton.gui.widget.WItemSlot;
-import io.github.cottonmc.cotton.gui.widget.WLabel;
-import io.github.cottonmc.cotton.gui.widget.WSprite;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class AoAHandlers {
 	// Constants
@@ -102,7 +93,7 @@ public class AoAHandlers {
 		return panel;
 	}
 
-	public static void makeTitle(final WGridPanel panel, final TranslatableText text) {
+	public static void makeTitle(final WGridPanel panel, final Text text) {
 		AoAHandlers.makeTitle(panel, new WLabel(text, WLabel.DEFAULT_TEXT_COLOR));
 	}
 

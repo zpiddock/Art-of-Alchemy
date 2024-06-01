@@ -1,11 +1,11 @@
 package dev.cafeteria.artofalchemy.gui.widget;
 
-import java.util.List;
-
 import io.github.cottonmc.cotton.gui.widget.WItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
+
+import java.util.List;
 
 public class WItemScalable extends WItem {
 	public WItemScalable(final ItemStack stack) {
@@ -16,7 +16,7 @@ public class WItemScalable extends WItem {
 		super(items);
 	}
 
-	public WItemScalable(final Tag<? extends ItemConvertible> tag) {
+	public WItemScalable(final TagKey<? extends ItemConvertible> tag) {
 		super(tag);
 	}
 

@@ -43,7 +43,7 @@ public class WFormulaList extends WListPanel<Item, WFormulaListItem> {
 			this.data.sort((item1, item2) -> item1.getName().toString().compareToIgnoreCase(item2.getName().toString()));
 			this.data.removeIf(item -> {
 				final String lcFilter = filter.toLowerCase();
-				if (item.getName().asString().toLowerCase().contains(lcFilter)) {
+				if (item.getName().getString().toLowerCase().contains(lcFilter)) {
 					return false;
 				} else {
 					return !Registry.ITEM.getId(item).getPath().contains(lcFilter);

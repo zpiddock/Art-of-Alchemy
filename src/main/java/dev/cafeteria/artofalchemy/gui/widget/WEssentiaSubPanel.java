@@ -10,9 +10,7 @@ import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class WEssentiaSubPanel extends WPlainPanel {
@@ -98,13 +96,13 @@ public class WEssentiaSubPanel extends WPlainPanel {
 		if (essentia != null) {
 			this.bg.setTint(essentia.getColor());
 			this.sprite.setImage(new Identifier(id.getNamespace(), "textures/gui/symbols/" + id.getPath() + ".png"));
-			this.amtLabel.setText(new LiteralText(amount.toString()));
-			this.typeLabel.setText(new TranslatableText("essentia." + id.getNamespace() + "." + id.getPath()));
+			this.amtLabel.setText(Text.literal(amount.toString()));
+			this.typeLabel.setText(Text.translatable("essentia." + id.getNamespace() + "." + id.getPath()));
 			this.typeLabel.setColor(0xFFFFFF, 0xFFFFFF);
 		} else {
 			this.sprite.setImage(WEssentiaSubPanel.SYMBOLS_EMPTY);
-			this.typeLabel.setText(new TranslatableText("gui." + ArtOfAlchemy.MOD_ID + ".empty"));
-			this.amtLabel.setText(new LiteralText(""));
+			this.typeLabel.setText(Text.translatable("gui." + ArtOfAlchemy.MOD_ID + ".empty"));
+			this.amtLabel.setText(Text.literal(""));
 		}
 		this.amtLabel.setColor(WLabel.DEFAULT_TEXT_COLOR, WLabel.DEFAULT_DARKMODE_TEXT_COLOR);
 		this.layout();
@@ -115,10 +113,10 @@ public class WEssentiaSubPanel extends WPlainPanel {
 		if (required > 0) {
 			if (amount < required) {
 				this.amtLabel.setColor(0xAA0000, 0xFF5555);
-				this.amtLabel.setText(new LiteralText(Integer.toString(amount - required)));
+				this.amtLabel.setText(Text.literal(Integer.toString(amount - required)));
 			} else {
 				this.amtLabel.setColor(0x00AA00, 0x55FF55);
-				this.amtLabel.setText(new LiteralText("+" + (amount - required)));
+				this.amtLabel.setText(Text.literal("+" + (amount - required)));
 			}
 		}
 	}

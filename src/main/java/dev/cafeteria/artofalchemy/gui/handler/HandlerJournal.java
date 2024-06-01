@@ -7,12 +7,7 @@ import dev.cafeteria.artofalchemy.item.ItemJournal;
 import dev.cafeteria.artofalchemy.network.AoAClientNetworking;
 import dev.cafeteria.artofalchemy.util.AoAHelper;
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
-import io.github.cottonmc.cotton.gui.widget.WButton;
-import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import io.github.cottonmc.cotton.gui.widget.WItemSlot;
-import io.github.cottonmc.cotton.gui.widget.WLabel;
-import io.github.cottonmc.cotton.gui.widget.WSprite;
-import io.github.cottonmc.cotton.gui.widget.WTextField;
+import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,7 +18,7 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -72,8 +67,9 @@ public class HandlerJournal extends SyncedGuiDescription {
 		this.searchBar = new WTextField() {
 			@Override
 			public void onKeyPressed(final int ch, final int key, final int modifiers) {
-				super.onKeyPressed(ch, key, modifiers);
+				var ret = super.onKeyPressed(ch, key, modifiers);
 				HandlerJournal.this.formulaList.refresh(HandlerJournal.this.journal, this.getText());
+				return ret;
 			}
 
 			@Override
@@ -102,7 +98,7 @@ public class HandlerJournal extends SyncedGuiDescription {
 		this.formulaList.refresh();
 		panel.add(this.formulaList, 0, 2 * AoAHandlers.BASIS, (9 * AoAHandlers.BASIS) + 8, (6 * AoAHandlers.BASIS) - 2);
 
-		this.clearButton = new WButton(new LiteralText("❌"));
+		this.clearButton = new WButton(Text.literal("❌"));
 		this.clearButton.setAlignment(HorizontalAlignment.CENTER);
 		this.clearButton.setParent(panel);
 		panel.add(
