@@ -300,7 +300,7 @@ public class BlockEntitySynthesizer extends BlockEntity
 	@Override
 	public boolean isValid(final int slot, final ItemStack stack) {
 		if (slot == 1) {
-			return AoATags.CONTAINERS.contains(stack.getItem());
+			return stack.isIn(AoATags.CONTAINERS);
 		} else {
 			return true;
 		}

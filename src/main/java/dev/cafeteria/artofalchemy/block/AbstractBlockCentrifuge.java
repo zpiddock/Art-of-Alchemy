@@ -4,6 +4,7 @@ import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -23,7 +24,7 @@ abstract public class AbstractBlockCentrifuge extends Block implements BlockEnti
 
 	public static final int TANK_SIZE = 4000;
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-	public static final Settings SETTINGS = Settings.of(Material.STONE).strength(5.0f, 6.0f);
+	public static final Settings SETTINGS = Settings.copy(Blocks.STONE).strength(5.0f, 6.0f);
 	protected EssentiaContainer input = new EssentiaContainer().setCapacity(AbstractBlockCentrifuge.TANK_SIZE)
 		.setInput(true).setOutput(false);
 	protected EssentiaContainer[] outputs;
@@ -40,7 +41,7 @@ abstract public class AbstractBlockCentrifuge extends Block implements BlockEnti
 
 	@Override
 	public BlockState getPlacementState(final ItemPlacementContext ctx) {
-		return super.getPlacementState(ctx).with(AbstractBlockCentrifuge.FACING, ctx.getPlayerFacing().getOpposite());
+		return super.getPlacementState(ctx).with(AbstractBlockCentrifuge.FACING, ctx.getPlayerLookDirection().getOpposite());
 	}
 
 	@Override
@@ -48,9 +49,11 @@ abstract public class AbstractBlockCentrifuge extends Block implements BlockEnti
 		return state.rotate(mirror.getRotation(state.get(AbstractBlockCentrifuge.FACING)));
 	}
 
+
+
 	@Override
 	public ActionResult onUse(
-		final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand,
+		final BlockState state, final World world, final BlockPos pos, final PlayerEntity player,
 		final BlockHitResult hit
 	) {
 		if (world.isClient) {

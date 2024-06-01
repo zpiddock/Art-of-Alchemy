@@ -18,12 +18,17 @@ import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WSprite;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.advancement.criterion.InventoryChangedCriterion;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerPropertyUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
@@ -69,13 +74,13 @@ public class AoAHandlers {
 		panel.add(gui.createPlayerInventoryPanel(), AoAHandlers.OFFSET, (5 * AoAHandlers.BASIS) - AoAHandlers.OFFSET);
 	}
 
-	private static <T extends ScreenHandler> ScreenHandlerRegistry.ExtendedClientHandlerFactory<T> defaultFactory(
+	private static <T extends ScreenHandler, K> ExtendedScreenHandlerType.ExtendedFactory<T, K> defaultFactory(
 		final Class<T> klass
 	) {
 		return (syncId, inventory, buf) -> {
 			try {
 				return klass.getDeclaredConstructor(int.class, PlayerInventory.class, ScreenHandlerContext.class)
-					.newInstance(syncId, inventory, ScreenHandlerContext.create(inventory.player.world, buf.readBlockPos()));
+					.newInstance(syncId, inventory, ScreenHandlerContext.create(inventory.player.getWorld(), buf.readBlockPos()));
 			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();
 				return null;
@@ -102,7 +107,7 @@ public class AoAHandlers {
 		return panel;
 	}
 
-	public static void makeTitle(final WGridPanel panel, final TranslatableText text) {
+	public static void makeTitle(final WGridPanel panel, final Text text) {
 		AoAHandlers.makeTitle(panel, new WLabel(text, WLabel.DEFAULT_TEXT_COLOR));
 	}
 
@@ -112,8 +117,7 @@ public class AoAHandlers {
 	}
 
 	public static void registerHandlers() {
-		AoAHandlers.CALCINATOR = ScreenHandlerRegistry
-			.registerExtended(BlockCalcinator.getId(), AoAHandlers.defaultFactory(HandlerCalcinator.class));
+		AoAHandlers.CALCINATOR = new ExtendedScreenHandlerType<>(defaultFactory(HandlerCalcinator.class), PacketCodecs.codec(PlayerInventory.CODEC).cast());
 		AoAHandlers.DISSOLVER = ScreenHandlerRegistry
 			.registerExtended(BlockDissolver.getId(), AoAHandlers.defaultFactory(HandlerDissolver.class));
 		AoAHandlers.DISTILLER = ScreenHandlerRegistry

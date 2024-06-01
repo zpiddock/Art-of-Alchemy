@@ -15,8 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TranslatableOption;
 
 public class HandlerAnalyzer extends SyncedGuiDescription {
 	public HandlerAnalyzer(final int syncId, final PlayerInventory playerInventory, final ScreenHandlerContext ctx) {
@@ -35,7 +37,7 @@ public class HandlerAnalyzer extends SyncedGuiDescription {
 		};
 
 		final WGridPanel panel = AoAHandlers.makePanel(this);
-		AoAHandlers.makeTitle(panel, new TranslatableText("block.artofalchemy.analysis_desk"));
+		AoAHandlers.makeTitle(panel, Text.translatable("block.artofalchemy.analysis_desk"));
 		AoAHandlers.addInventory(panel, this);
 		AoAHandlers.addBigOutput(panel, WItemSlot.outputOf(this.blockInventory, 3));
 
@@ -88,10 +90,10 @@ public class HandlerAnalyzer extends SyncedGuiDescription {
 	}
 
 	@Override
-	public void close(final PlayerEntity player) {
+	public void onClosed(final PlayerEntity player) {
 		this.blockInventory.removeStack(3);
 		this.dropInventory(player, this.blockInventory);
-		super.close(player);
+		super.onClosed(player);
 	}
 
 	@Override

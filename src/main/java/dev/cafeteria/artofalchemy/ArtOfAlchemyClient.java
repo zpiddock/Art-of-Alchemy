@@ -17,5 +17,4 @@ public class ArtOfAlchemyClient implements ClientModInitializer {
 		AoARenderers.registerRenderers();
 		AoAClientNetworking.initializeClientNetworking();
 	}
-
 }
