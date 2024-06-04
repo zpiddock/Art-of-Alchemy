@@ -1,6 +1,5 @@
 package dev.cafeteria.artofalchemy.render.model;
 
-import com.mojang.datafixers.util.Pair;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityPipe;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -18,11 +17,18 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -189,34 +195,34 @@ public class ModelPipe implements UnbakedModel, BakedModel, FabricBakedModel {
 		final Matrix4f[] matrices = new Matrix4f[ModelPipe.DIRECTION_COUNT];
 
 		final Matrix4f transform = new Matrix4f();
-		transform.loadIdentity();
+		transform.identity();
 		matrices[Direction.DOWN.ordinal()] = new Matrix4f(transform);
 
-		transform.multiply(Matrix4f.translate(0.5f, 0.5f, 0.5f));
+		transform.translate(0.5f, 0.5f, 0.5f);
 
 		Matrix4f subTransform = new Matrix4f(transform);
-		subTransform.multiply(new Quaternion(new Vec3f(0, 0, 1), 90, true));
-		subTransform.multiply(Matrix4f.translate(-0.5f, -0.5f, -0.5f));
+		subTransform.rotate(new Quaternionf().fromAxisAngleDeg(new Vector3f(0, 0, 1), 90));
+		subTransform.translate(-0.5f, -0.5f, -0.5f);
 		matrices[Direction.EAST.ordinal()] = subTransform;
 
 		subTransform = new Matrix4f(transform);
-		subTransform.multiply(new Quaternion(new Vec3f(0, 0, 1), 180, true));
-		subTransform.multiply(Matrix4f.translate(-0.5f, -0.5f, -0.5f));
+		subTransform.rotate(new Quaternionf().fromAxisAngleDeg(new Vector3f(0, 0, 1), 180));
+		subTransform.translate(-0.5f, -0.5f, -0.5f);
 		matrices[Direction.UP.ordinal()] = subTransform;
 
 		subTransform = new Matrix4f(transform);
-		subTransform.multiply(new Quaternion(new Vec3f(0, 0, 1), 270, true));
-		subTransform.multiply(Matrix4f.translate(-0.5f, -0.5f, -0.5f));
+		subTransform.rotate(new Quaternionf().fromAxisAngleDeg(new Vector3f(0, 0, 1), 270));
+		subTransform.translate(-0.5f, -0.5f, -0.5f);
 		matrices[Direction.WEST.ordinal()] = subTransform;
 
 		subTransform = new Matrix4f(transform);
-		subTransform.multiply(new Quaternion(new Vec3f(1, 0, 0), 90, true));
-		subTransform.multiply(Matrix4f.translate(-0.5f, -0.5f, -0.5f));
+		subTransform.rotate(new Quaternionf().fromAxisAngleDeg(new Vector3f(1, 0, 0), 90));
+		subTransform.translate(-0.5f, -0.5f, -0.5f);
 		matrices[Direction.NORTH.ordinal()] = subTransform;
 
 		subTransform = new Matrix4f(transform);
-		subTransform.multiply(new Quaternion(new Vec3f(1, 0, 0), 270, true));
-		subTransform.multiply(Matrix4f.translate(-0.5f, -0.5f, -0.5f));
+		subTransform.rotate(new Quaternionf().fromAxisAngleDeg(new Vector3f(1, 0, 0), 270));
+		subTransform.translate(-0.5f, -0.5f, -0.5f);
 		matrices[Direction.SOUTH.ordinal()] = subTransform;
 
 		return matrices;
@@ -301,8 +307,8 @@ public class ModelPipe implements UnbakedModel, BakedModel, FabricBakedModel {
 		final QuadEmitter emitter, final Matrix4f transformation, final int i, final int x, final int y, final int z
 	) {
 		ModelPipe.scratchVector.set(x / 16.0f, y / 16.0f, z / 16.0f, 1.0f);
-		ModelPipe.scratchVector.transform(transformation);
-		emitter.pos(i, ModelPipe.scratchVector.getX(), ModelPipe.scratchVector.getY(), ModelPipe.scratchVector.getZ());
+		ModelPipe.scratchVector = transformation.transform(ModelPipe.scratchVector);
+		emitter.pos(i, ModelPipe.scratchVector.x(), ModelPipe.scratchVector.y(), ModelPipe.scratchVector.z());
 	}
 
 	private static void emitTubeMesh(
@@ -327,9 +333,16 @@ public class ModelPipe implements UnbakedModel, BakedModel, FabricBakedModel {
 	private final FaceMeshes[] faceMeshes = new FaceMeshes[ModelPipe.DIRECTION_COUNT];
 
 	@Override
+	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+
+	}
+
+	@Override
 	public BakedModel bake(
-		final ModelLoader loader, final Function<SpriteIdentifier, Sprite> textureGetter,
-		final ModelBakeSettings rotationContainer, final Identifier modelId
+			Baker baker,
+			Function<SpriteIdentifier, Sprite> textureGetter,
+			ModelBakeSettings rotationContainer,
+			Identifier modelId
 	) {
 		final Sprite coreSprite = textureGetter.apply(ModelPipe.SPRITE_IDS[0]);
 		final Sprite tubeSprite = textureGetter.apply(ModelPipe.SPRITE_IDS[1]);
@@ -480,14 +493,14 @@ public class ModelPipe implements UnbakedModel, BakedModel, FabricBakedModel {
 		return this.blockBreakSprite;
 	}
 
-	@Override
-	public Collection<SpriteIdentifier> getTextureDependencies(
-		final Function<Identifier, UnbakedModel> unbakedModelGetter,
-		final Set<Pair<String, String>> unresolvedTextureReferences
-	) {
-		return Arrays.asList(ModelPipe.SPRITE_IDS); // The textures this model (and all its model dependencies, and their
-																								// dependencies, etc...!) depends on.
-	}
+//	@Override
+//	public Collection<SpriteIdentifier> getTextureDependencies(
+//		final Function<Identifier, UnbakedModel> unbakedModelGetter,
+//		final Set<Pair<String, String>> unresolvedTextureReferences
+//	) {
+//		return Arrays.asList(ModelPipe.SPRITE_IDS); // The textures this model (and all its model dependencies, and their
+//																								// dependencies, etc...!) depends on.
+//	}
 
 	@Override
 	public ModelTransformation getTransformation() {

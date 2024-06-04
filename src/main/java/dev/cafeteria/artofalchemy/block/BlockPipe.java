@@ -51,7 +51,7 @@ public class BlockPipe extends Block implements NetworkElement, BlockEntityProvi
 
 	public BlockPipe() {
 		super(
-			Settings.of(Material.ORGANIC_PRODUCT).strength(0.1f).nonOpaque().noCollision().sounds(BlockSoundGroup.NETHERITE)
+			Settings.copy(Blocks.BROWN_MUSHROOM).strength(0.1f).nonOpaque().noCollision().sounds(BlockSoundGroup.NETHERITE)
 		);
 	}
 

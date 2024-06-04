@@ -8,10 +8,10 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BlockCalcinatorPlus extends BlockCalcinator {
@@ -20,7 +20,7 @@ public class BlockCalcinatorPlus extends BlockCalcinator {
 		.luminance(state -> state.get(BlockCalcinator.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
-		return Registry.BLOCK.getId(AoABlocks.CALCINATOR_PLUS);
+		return Registries.BLOCK.getId(AoABlocks.CALCINATOR_PLUS);
 	}
 
 	public BlockCalcinatorPlus() {

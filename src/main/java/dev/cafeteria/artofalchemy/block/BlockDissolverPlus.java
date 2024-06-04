@@ -8,9 +8,9 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BlockDissolverPlus extends BlockDissolver {
@@ -19,7 +19,7 @@ public class BlockDissolverPlus extends BlockDissolver {
 		.luminance(state -> state.get(BlockDissolver.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
-		return Registry.BLOCK.getId(AoABlocks.DISSOLVER_PLUS);
+		return Registries.BLOCK.getId(AoABlocks.DISSOLVER_PLUS);
 	}
 
 	public BlockDissolverPlus() {

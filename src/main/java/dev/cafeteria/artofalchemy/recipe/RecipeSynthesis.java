@@ -11,6 +11,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -40,7 +41,7 @@ public class RecipeSynthesis implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack craft(final Inventory inv) {
+	public ItemStack craft(final Inventory inv, DynamicRegistryManager manager) {
 		return ItemStack.EMPTY;
 	}
 
@@ -84,7 +85,7 @@ public class RecipeSynthesis implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack getOutput() {
+	public ItemStack getOutput(DynamicRegistryManager manager) {
 		return ItemStack.EMPTY;
 	}
 

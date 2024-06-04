@@ -3,7 +3,7 @@ package dev.cafeteria.artofalchemy.gui.widget;
 import io.github.cottonmc.cotton.gui.widget.WItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 
 import java.util.List;
 

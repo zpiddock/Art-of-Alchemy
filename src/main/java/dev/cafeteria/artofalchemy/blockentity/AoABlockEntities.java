@@ -7,7 +7,8 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 @SuppressWarnings("deprecation") // Experimental API
 public class AoABlockEntities {
@@ -38,7 +39,7 @@ public class AoABlockEntities {
 		.create(BlockEntityPipe::new, AoABlocks.PIPE).build(null);
 
 	public static void register(final String name, final BlockEntityType<? extends BlockEntity> blockEntity) {
-		Registry.register(Registry.BLOCK_ENTITY_TYPE, ArtOfAlchemy.id(name), blockEntity);
+		Registry.register(Registries.BLOCK_ENTITY_TYPE, ArtOfAlchemy.id(name), blockEntity);
 	}
 
 	@SuppressWarnings("unchecked")

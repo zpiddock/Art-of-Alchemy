@@ -4,11 +4,7 @@ import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntitySynthesizer;
 import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import dev.cafeteria.artofalchemy.item.AoAItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -17,6 +13,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -26,17 +23,16 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BlockSynthesizer extends BlockWithEntity {
 
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Settings SETTINGS = Settings.of(Material.STONE).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.copy(Blocks.STONE).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockSynthesizer.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
-		return Registry.BLOCK.getId(AoABlocks.SYNTHESIZER);
+		return Registries.BLOCK.getId(AoABlocks.SYNTHESIZER);
 	}
 
 	public BlockSynthesizer() {

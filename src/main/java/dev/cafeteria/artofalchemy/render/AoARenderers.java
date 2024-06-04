@@ -2,7 +2,6 @@ package dev.cafeteria.artofalchemy.render;
 
 import dev.cafeteria.artofalchemy.block.AoABlocks;
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
-import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import dev.cafeteria.artofalchemy.essentia.RegistryEssentia;
 import dev.cafeteria.artofalchemy.fluid.AoAFluids;
@@ -13,22 +12,20 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistrySpecificAccessor;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class AoARenderers {
 
 	@Environment(EnvType.CLIENT)
 	public static void registerRenderers() {
-		BlockEntityRendererRegistry.register(AoABlockEntities.TANK, RendererTank::new);
+		BlockEntityRendererFactories.register(AoABlockEntities.TANK, RendererTank::new);
 		BlockRenderLayerMap.INSTANCE.putBlock(AoABlocks.TANK, RenderLayer.getCutout());
 
 		RendererFluid.setupFluidRendering(
@@ -39,7 +36,7 @@ public class AoARenderers {
 		);
 		RendererFluid.markTranslucent(AoAFluids.ALKAHEST, AoAFluids.ALKAHEST_FLOWING);
 
-		RegistryEssentia.INSTANCE.forEach((Consumer<Essentia>) essentia -> {
+		RegistryEssentia.INSTANCE.forEach(essentia -> {
 			final Fluid still = AoAFluids.ESSENTIA_FLUIDS.get(essentia);
 			final Fluid flowing = AoAFluids.ESSENTIA_FLUIDS_FLOWING.get(essentia);
 			RendererFluid.setupFluidRendering(still, flowing, new Identifier("minecraft", "water"), essentia.getColor());

@@ -9,6 +9,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -40,7 +41,7 @@ public class RecipeCalcination implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack craft(final Inventory inv) {
+	public ItemStack craft(final Inventory inv, DynamicRegistryManager manager) {
 		return this.output.copy();
 	}
 
@@ -54,6 +55,11 @@ public class RecipeCalcination implements Recipe<Inventory> {
 	@Environment(EnvType.CLIENT)
 	public boolean fits(final int width, final int height) {
 		return true;
+	}
+
+	@Override
+	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+		return this.output;
 	}
 
 	public ItemStack getContainer() {
@@ -77,11 +83,6 @@ public class RecipeCalcination implements Recipe<Inventory> {
 
 	public Ingredient getInput() {
 		return this.input;
-	}
-
-	@Override
-	public ItemStack getOutput() {
-		return this.output;
 	}
 
 	@Override

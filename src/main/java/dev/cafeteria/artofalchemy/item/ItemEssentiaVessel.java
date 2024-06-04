@@ -14,12 +14,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -195,7 +195,7 @@ public class ItemEssentiaVessel extends Item {
 	@Override
 	protected String getOrCreateTranslationKey() {
 		if (this.translationKey == null) {
-			this.translationKey = Util.createTranslationKey("item", Registry.ITEM.getId(AoAItems.ESSENTIA_VESSEL));
+			this.translationKey = Util.createTranslationKey("item", Registries.ITEM.getId(AoAItems.ESSENTIA_VESSEL));
 		}
 		return this.translationKey;
 	}
@@ -252,7 +252,7 @@ public class ItemEssentiaVessel extends Item {
 			}
 			container.in(stack);
 			if (world.isClient) {
-				user.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5f, pitch);
+				user.playSound(SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.PLAYERS, 0.5f, pitch);
 			}
 			return TypedActionResult.consume(stack);
 		}

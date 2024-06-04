@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,7 +23,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -42,14 +42,14 @@ public class ItemJournal extends AbstractItemFormula {
 	}
 
 	public static boolean addFormula(final ItemStack stack, final Item formula) {
-		return ItemJournal.addFormula(stack, Registry.ITEM.getId(formula));
+		return ItemJournal.addFormula(stack, Registries.ITEM.getId(formula));
 	}
 
 	public static List<Item> getEntries(final ItemStack stack) {
 		final List<Item> list = new ArrayList<>();
 		final NbtList entries = ItemJournal.getOrCreateEntriesTag(stack);
 		for (int i = 0; i < entries.size(); i++) {
-			final Item item = Registry.ITEM.get(Identifier.tryParse(entries.getString(i)));
+			final Item item = Registries.ITEM.get(Identifier.tryParse(entries.getString(i)));
 			if (item != Items.AIR) {
 				list.add(item);
 			}
@@ -70,14 +70,14 @@ public class ItemJournal extends AbstractItemFormula {
 		final NbtCompound tag = stack.getNbt();
 		if ((tag != null) && tag.contains("selected")) {
 			final Identifier id = new Identifier(tag.getString("selected"));
-			return Registry.ITEM.get(id);
+			return Registries.ITEM.get(id);
 		} else {
 			return Items.AIR;
 		}
 	}
 
 	public static Identifier getId() {
-		return Registry.ITEM.getId(AoAItems.JOURNAL);
+		return Registries.ITEM.getId(AoAItems.JOURNAL);
 	}
 
 	public static NbtList getOrCreateEntriesTag(final ItemStack stack) {
@@ -92,7 +92,7 @@ public class ItemJournal extends AbstractItemFormula {
 	}
 
 	public static boolean hasFormula(final ItemStack stack, final Identifier formula) {
-		if (formula.equals(Registry.ITEM.getId(Items.AIR))) {
+		if (formula.equals(Registries.ITEM.getId(Items.AIR))) {
 			return true;
 		} else {
 			return ItemJournal.getOrCreateEntriesTag(stack).contains(NbtString.of(formula.toString()));
@@ -100,11 +100,11 @@ public class ItemJournal extends AbstractItemFormula {
 	}
 
 	public static boolean hasFormula(final ItemStack stack, final Item formula) {
-		return ItemJournal.hasFormula(stack, Registry.ITEM.getId(formula));
+		return ItemJournal.hasFormula(stack, Registries.ITEM.getId(formula));
 	}
 
 	public static boolean setFormula(final ItemStack stack, final Identifier formula) {
-		if (ItemJournal.hasFormula(stack, formula) || (formula == Registry.ITEM.getId(Items.AIR))) {
+		if (ItemJournal.hasFormula(stack, formula) || (formula == Registries.ITEM.getId(Items.AIR))) {
 			final NbtCompound tag = stack.getOrCreateNbt();
 			tag.put("selected", NbtString.of(formula.toString()));
 			stack.setNbt(tag);
@@ -115,7 +115,7 @@ public class ItemJournal extends AbstractItemFormula {
 	}
 
 	public static void setFormula(final ItemStack stack, final Item formula) {
-		ItemJournal.setFormula(stack, Registry.ITEM.getId(formula));
+		ItemJournal.setFormula(stack, Registries.ITEM.getId(formula));
 	}
 
 	public ItemJournal(final Settings settings) {

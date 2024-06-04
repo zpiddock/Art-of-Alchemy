@@ -9,19 +9,20 @@ import dev.cafeteria.artofalchemy.util.AoAHelper;
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
+import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class HandlerJournal extends SyncedGuiDescription {
 
@@ -66,7 +67,7 @@ public class HandlerJournal extends SyncedGuiDescription {
 
 		this.searchBar = new WTextField() {
 			@Override
-			public void onKeyPressed(final int ch, final int key, final int modifiers) {
+			public InputResult onKeyPressed(final int ch, final int key, final int modifiers) {
 				var ret = super.onKeyPressed(ch, key, modifiers);
 				HandlerJournal.this.formulaList.refresh(HandlerJournal.this.journal, this.getText());
 				return ret;
@@ -109,7 +110,7 @@ public class HandlerJournal extends SyncedGuiDescription {
 			AoAHandlers.BASIS + 2
 		);
 		this.clearButton
-			.setOnClick(() -> AoAClientNetworking.sendJournalSelectPacket(Registry.ITEM.getId(Items.AIR), hand));
+			.setOnClick(() -> AoAClientNetworking.sendJournalSelectPacket(Registries.ITEM.getId(Items.AIR), hand));
 		this.clearButton.setEnabled(ItemJournal.getFormula(this.journal) != Items.AIR);
 
 		panel.add(this.createPlayerInventoryPanel(), AoAHandlers.OFFSET, 8 * AoAHandlers.BASIS);
@@ -118,9 +119,9 @@ public class HandlerJournal extends SyncedGuiDescription {
 	}
 
 	@Override
-	public void close(final PlayerEntity player) {
+	public void onClosed(final PlayerEntity player) {
 		this.dropInventory(player, this.inventory);
-		super.close(player);
+		super.onClosed(player);
 	}
 
 	@Override
@@ -147,7 +148,7 @@ public class HandlerJournal extends SyncedGuiDescription {
 			this.formulaList.refresh(this.journal, this.searchBar.getText());
 			this.clearButton.setEnabled(ItemJournal.getFormula(this.journal) != Items.AIR);
 		} else {
-			this.close(this.playerInventory.player);
+			this.onClosed(this.playerInventory.player);
 		}
 	}
 

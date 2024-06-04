@@ -6,7 +6,7 @@ import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -23,7 +23,7 @@ public class BlockTank extends Block implements BlockEntityProvider {
 
 	public static final BooleanProperty CONNECTED_TOP = BooleanProperty.of("connected_top");
 	public static final BooleanProperty CONNECTED_BOTTOM = BooleanProperty.of("connected_bottom");
-	public static final Settings SETTINGS = Settings.of(Material.GLASS).nonOpaque().strength(0.5f)
+	public static final Settings SETTINGS = Settings.copy(Blocks.GLASS).nonOpaque().strength(0.5f)
 		.sounds(BlockSoundGroup.GLASS);
 
 	public BlockTank() {

@@ -1,7 +1,5 @@
 package dev.cafeteria.artofalchemy.block;
 
-import java.util.function.Predicate;
-
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityDistiller;
 import dev.cafeteria.artofalchemy.fluid.AoAFluids;
@@ -11,17 +9,14 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager.Builder;
@@ -33,8 +28,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.function.Predicate;
 
 @SuppressWarnings("deprecation") // Experimental API
 public class BlockDistiller extends BlockWithEntity {
@@ -44,7 +40,7 @@ public class BlockDistiller extends BlockWithEntity {
 		.luminance(state -> state.get(BlockDistiller.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
-		return Registry.BLOCK.getId(AoABlocks.DISTILLER);
+		return Registries.BLOCK.getId(AoABlocks.DISTILLER);
 	}
 
 	public BlockDistiller() {

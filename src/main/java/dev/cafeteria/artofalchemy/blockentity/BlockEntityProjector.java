@@ -24,9 +24,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -37,7 +37,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation") // Experimental API
 public class BlockEntityProjector extends BlockEntity
@@ -104,7 +103,7 @@ public class BlockEntityProjector extends BlockEntity
 		if ((recipe == null) || inSlot.isEmpty()) {
 			return false;
 		} else {
-			final ItemStack outStack = recipe.getOutput();
+			final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
 			final int alkCost = recipe.getAlkahest();
 			final int itemCost = recipe.getCost();
 
@@ -140,7 +139,7 @@ public class BlockEntityProjector extends BlockEntity
 		final ItemStack inSlot = this.items.get(0);
 		final ItemStack outSlot = this.items.get(1);
 
-		final ItemStack outStack = recipe.getOutput();
+		final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
 
 		inSlot.decrement(recipe.getCost());
 		this.mBAddAlkahest(-recipe.getAlkahest());
@@ -152,7 +151,6 @@ public class BlockEntityProjector extends BlockEntity
 		}
 	}
 
-	@Nullable
 	@Override
 	public Packet<ClientPlayPacketListener> toUpdatePacket() {
 

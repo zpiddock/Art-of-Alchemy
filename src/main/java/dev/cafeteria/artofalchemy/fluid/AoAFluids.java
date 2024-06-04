@@ -1,14 +1,15 @@
 package dev.cafeteria.artofalchemy.fluid;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.essentia.RegistryEssentia;
 import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AoAFluids {
 
@@ -18,7 +19,7 @@ public class AoAFluids {
 	public static final Map<Essentia, FlowableFluid> ESSENTIA_FLUIDS_FLOWING = new HashMap<>();
 
 	public static FlowableFluid register(final Identifier id, final FlowableFluid fluid) {
-		return Registry.register(Registry.FLUID, id, fluid);
+		return Registry.register(Registries.FLUID, id, fluid);
 	}
 
 	public static FlowableFluid register(final String name, final FlowableFluid fluid) {

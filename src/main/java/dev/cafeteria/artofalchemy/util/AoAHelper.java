@@ -3,11 +3,16 @@ package dev.cafeteria.artofalchemy.util;
 import dev.cafeteria.artofalchemy.item.ItemAlchemyFormula;
 import dev.cafeteria.artofalchemy.item.ItemJournal;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation") // Experimental API
 public class AoAHelper {
@@ -64,4 +69,8 @@ public class AoAHelper {
 		return ((long) fluid * FluidConstants.BUCKET) / 1000;
 	}
 
+	public static DamageSource damageSourceOf(World world, RegistryKey<DamageType> key) {
+
+		return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));
+	}
 }

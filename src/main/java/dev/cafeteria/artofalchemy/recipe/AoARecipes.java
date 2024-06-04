@@ -4,7 +4,8 @@ import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 public class AoARecipes {
 
@@ -21,7 +22,7 @@ public class AoARecipes {
 	public static RecipeSerializer<RecipeProjection> PROJECTION_SERIALIZER;
 
 	public static <T extends Recipe<?>> RecipeType<T> register(final String name) {
-		return Registry.register(Registry.RECIPE_TYPE, ArtOfAlchemy.id(name), new RecipeType<T>() {
+		return Registry.register(Registries.RECIPE_TYPE, ArtOfAlchemy.id(name), new RecipeType<T>() {
 			@Override
 			public String toString() {
 				return ArtOfAlchemy.id(name).toString();
@@ -30,7 +31,7 @@ public class AoARecipes {
 	}
 
 	public static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(final String name, final S serializer) {
-		return Registry.register(Registry.RECIPE_SERIALIZER, ArtOfAlchemy.id(name), serializer);
+		return Registry.register(Registries.RECIPE_SERIALIZER, ArtOfAlchemy.id(name), serializer);
 	}
 
 	public static void registerRecipes() {

@@ -1,13 +1,10 @@
 package dev.cafeteria.artofalchemy.render;
 
-import java.util.function.Function;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
@@ -16,12 +13,14 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
+
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class RendererFluid {
@@ -40,12 +39,14 @@ public class RendererFluid {
 		final Identifier stillTexture = new Identifier(texture.getNamespace(), "block/" + texture.getPath() + "_still");
 		final Identifier flowTexture = new Identifier(texture.getNamespace(), "block/" + texture.getPath() + "_flow");
 
-		ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> {
-			registry.register(stillTexture);
-			registry.register(flowTexture);
-		});
+		// Not needed if we're using minecrafts water texture?
 
-		final Identifier fluidId = Registry.FLUID.getId(still);
+//		ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> {
+//			registry.register(stillTexture);
+//			registry.register(flowTexture);
+//		});
+
+		final Identifier fluidId = Registries.FLUID.getId(still);
 		final Identifier listenerId = new Identifier(fluidId.getNamespace(), fluidId.getPath() + "_reload_listener");
 		final Sprite[] sprites = {
 			null, null

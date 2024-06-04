@@ -12,9 +12,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class WFormulaListItem extends WPlainPanel {
 			this.setButton.setParent(this);
 			this.add(this.setButton, (8 * AoAHandlers.BASIS) - 8, -4, AoAHandlers.BASIS + 2, AoAHandlers.BASIS + 2);
 			this.setButton.setOnClick(
-				() -> AoAClientNetworking.sendJournalSelectPacket(Registry.ITEM.getId(WFormulaListItem.this.formula), hand)
+				() -> AoAClientNetworking.sendJournalSelectPacket(Registries.ITEM.getId(WFormulaListItem.this.formula), hand)
 			);
 		}
 

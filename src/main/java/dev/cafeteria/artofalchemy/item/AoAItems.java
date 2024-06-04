@@ -1,8 +1,5 @@
 package dev.cafeteria.artofalchemy.item;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityPipe;
 import dev.cafeteria.artofalchemy.essentia.Essentia;
@@ -13,9 +10,13 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Settings;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.registry.Registry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AoAItems {
 
@@ -49,11 +50,11 @@ public class AoAItems {
 	public static final Map<Essentia, Item> ESSENTIA_BUCKETS = new HashMap<>();
 
 	public static Settings defaults() {
-		return new Item.Settings().group(ArtOfAlchemy.ALCHEMY_GROUP);
+		return new Item.Settings();
 	}
 
 	public static Item register(final Identifier id, final Item item) {
-		return Registry.register(Registry.ITEM, id, item);
+		return Registry.register(Registries.ITEM, id, item);
 	}
 
 	public static Item register(final String name, final Item item) {

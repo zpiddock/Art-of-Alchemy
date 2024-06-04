@@ -1,9 +1,5 @@
 package dev.cafeteria.artofalchemy;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import dev.cafeteria.artofalchemy.block.AoABlocks;
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.dispenser.AoADispenserBehavior;
@@ -19,11 +15,15 @@ import dev.cafeteria.artofalchemy.util.AoATags;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ArtOfAlchemy implements ModInitializer {
 
@@ -32,8 +32,10 @@ public class ArtOfAlchemy implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger(ArtOfAlchemy.MOD_NAME);
 
-	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroupBuilder.create(ArtOfAlchemy.id("alchemy"))
-		.icon(() -> new ItemStack(AoAItems.MYSTERIOUS_SIGIL)).build();
+	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroup.builder(ArtOfAlchemy.id(MOD_ID))
+			.displayName(Text.translatable("itemGroup.artofalchemy.alchemy"))
+			.icon(() -> new ItemStack(AoAItems.MYSTERIOUS_SIGIL))
+			.build();
 
 	public static Identifier id(final String name) {
 		return new Identifier(ArtOfAlchemy.MOD_ID, name);
@@ -63,6 +65,7 @@ public class ArtOfAlchemy implements ModInitializer {
 		AoADispenserBehavior.registerDispenserBehavior();
 		AoANetworking.initializeNetworking();
 		AoALoot.initialize();
+//		Registry.register(Registries.ITEM_GROUP, id("alchemy"), ALCHEMY_GROUP);
 		ServerTickEvents.END_WORLD_TICK.register(world -> {
 			if (!world.isClient()) {
 				EssentiaNetworker.get(world).tick();

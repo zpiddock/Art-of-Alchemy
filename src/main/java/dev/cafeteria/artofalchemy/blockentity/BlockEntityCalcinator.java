@@ -22,9 +22,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -119,7 +119,7 @@ public class BlockEntityCalcinator extends BlockEntity
 		if ((recipe == null) || inSlot.isEmpty()) {
 			return false;
 		} else {
-			final ItemStack outStack = recipe.getOutput();
+			final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
 			final ItemStack container = recipe.getContainer();
 
 			float factor = this.getYield() * recipe.getFactor();
@@ -165,7 +165,7 @@ public class BlockEntityCalcinator extends BlockEntity
 	private void doCraft(final RecipeCalcination recipe) {
 		final ItemStack inSlot = this.items.get(0);
 		final ItemStack outSlot = this.items.get(2);
-		final ItemStack outStack = recipe.getOutput();
+		final ItemStack outStack = recipe.getOutput(this.world.getRegistryManager());
 		final ItemStack container = recipe.getContainer();
 
 		float factor = this.getYield() * recipe.getFactor();

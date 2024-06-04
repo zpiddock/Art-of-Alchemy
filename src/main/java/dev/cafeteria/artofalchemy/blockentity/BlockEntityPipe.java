@@ -7,14 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,10 +66,8 @@ public class BlockEntityPipe extends BlockEntity implements RenderAttachmentBloc
 		}
 	}
 
-
-	@Nullable
 	@Override
-	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+	public BlockEntityUpdateS2CPacket toUpdatePacket() {
 		return BlockEntityUpdateS2CPacket.create(this);
 	}
 
@@ -108,6 +103,14 @@ public class BlockEntityPipe extends BlockEntity implements RenderAttachmentBloc
 
 	public void setFaces(final Map<Direction, IOFace> faces) {
 		this.faces = faces;
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if (!this.world.isClient()) {
+			this.sync();
+		}
 	}
 
 	public void sync() {

@@ -88,10 +88,10 @@ public class HandlerAnalyzer extends SyncedGuiDescription {
 	}
 
 	@Override
-	public void close(final PlayerEntity player) {
+	public void onClosed(final PlayerEntity player) {
 		this.blockInventory.removeStack(3);
 		this.dropInventory(player, this.blockInventory);
-		super.close(player);
+		super.onClosed(player);
 	}
 
 	@Override

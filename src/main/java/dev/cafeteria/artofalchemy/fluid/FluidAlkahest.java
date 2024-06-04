@@ -13,6 +13,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
@@ -24,6 +25,11 @@ abstract class FluidAlkahest extends FlowableFluid {
 		protected void appendProperties(final StateManager.Builder<Fluid, FluidState> builder) {
 			super.appendProperties(builder);
 			builder.add(FlowableFluid.LEVEL);
+		}
+
+		@Override
+		protected boolean isInfinite(World world) {
+			return false;
 		}
 
 		// @Override
@@ -115,7 +121,7 @@ abstract class FluidAlkahest extends FlowableFluid {
 	}
 
 	@Override
-	protected boolean isInfinite() {
+	protected boolean isInfinite(World world) {
 		return false;
 	}
 

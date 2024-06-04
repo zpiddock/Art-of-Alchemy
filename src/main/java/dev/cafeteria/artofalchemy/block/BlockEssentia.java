@@ -2,13 +2,14 @@ package dev.cafeteria.artofalchemy.block;
 
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.fluid.AoAFluids;
+import dev.cafeteria.artofalchemy.util.AoAHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -29,7 +30,7 @@ public class BlockEssentia extends FluidBlock {
 
 	@Override
 	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
-		entity.damage(DamageSource.MAGIC, 2);
+		entity.damage(AoAHelper.damageSourceOf(world, DamageTypes.MAGIC), 2);
 		// world.playSound(entity.getX(), entity.getY(), entity.getZ(),
 		// SoundEvents.ENTITY_GENERIC_BURN,
 		// entity.getSoundCategory(), 1.0F, 1.0F, false);

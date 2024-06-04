@@ -1,7 +1,5 @@
 package dev.cafeteria.artofalchemy.gui.widget;
 
-import java.util.Map;
-
 import dev.cafeteria.artofalchemy.gui.handler.AoAHandlers;
 import dev.cafeteria.artofalchemy.item.ItemJournal;
 import io.github.cottonmc.cotton.gui.widget.WListPanel;
@@ -9,8 +7,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
-import net.minecraft.util.registry.Registry;
+
+import java.util.Map;
 
 public class WFormulaList extends WListPanel<Item, WFormulaListItem> {
 
@@ -46,7 +46,7 @@ public class WFormulaList extends WListPanel<Item, WFormulaListItem> {
 				if (item.getName().getString().toLowerCase().contains(lcFilter)) {
 					return false;
 				} else {
-					return !Registry.ITEM.getId(item).getPath().contains(lcFilter);
+					return !Registries.ITEM.getId(item).getPath().contains(lcFilter);
 				}
 			});
 		}

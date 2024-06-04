@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class ItemAlchemyFormula extends AbstractItemFormula {
 		final NbtCompound tag = stack.hasNbt() ? stack.getNbt() : new NbtCompound();
 		if (tag.contains("formula")) {
 			final Identifier id = new Identifier(tag.getString("formula"));
-			return Registry.ITEM.get(id);
+			return Registries.ITEM.get(id);
 		} else {
 			return Items.AIR;
 		}
@@ -30,7 +30,7 @@ public class ItemAlchemyFormula extends AbstractItemFormula {
 
 	public static void setFormula(final ItemStack stack, final Item formula) {
 		final NbtCompound tag = stack.getOrCreateNbt();
-		tag.put("formula", NbtString.of(Registry.ITEM.getId(formula).toString()));
+		tag.put("formula", NbtString.of(Registries.ITEM.getId(formula).toString()));
 	}
 
 	public ItemAlchemyFormula(final Settings settings) {

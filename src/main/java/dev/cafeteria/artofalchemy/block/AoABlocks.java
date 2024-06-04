@@ -1,8 +1,5 @@
 package dev.cafeteria.artofalchemy.block;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.essentia.RegistryEssentia;
@@ -11,8 +8,12 @@ import dev.cafeteria.artofalchemy.item.BlockItemMateria;
 import dev.cafeteria.artofalchemy.util.MateriaRank;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AoABlocks {
 
@@ -74,7 +75,7 @@ public class AoABlocks {
 	}
 
 	public static Block registerItemless(final Identifier id, final Block block) {
-		return Registry.register(Registry.BLOCK, id, block);
+		return Registry.register(Registries.BLOCK, id, block);
 	}
 
 	public static Block registerItemless(final String name, final Block block) {

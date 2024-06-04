@@ -2,31 +2,22 @@ package dev.cafeteria.artofalchemy.block;
 
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityCalcinator;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BlockCalcinator extends BlockWithEntity {
@@ -37,7 +28,7 @@ public class BlockCalcinator extends BlockWithEntity {
 		.luminance(state -> state.get(BlockCalcinator.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
-		return Registry.BLOCK.getId(AoABlocks.CALCINATOR);
+		return Registries.BLOCK.getId(AoABlocks.CALCINATOR);
 	}
 
 	public BlockCalcinator() {
@@ -63,7 +54,7 @@ public class BlockCalcinator extends BlockWithEntity {
 
 	@Override
 	public BlockState getPlacementState(final ItemPlacementContext ctx) {
-		return super.getPlacementState(ctx).with(BlockCalcinator.FACING, ctx.getPlayerFacing().getOpposite());
+		return super.getPlacementState(ctx).with(BlockCalcinator.FACING, ctx.getHorizontalPlayerFacing().getOpposite());
 	}
 
 	@Override
