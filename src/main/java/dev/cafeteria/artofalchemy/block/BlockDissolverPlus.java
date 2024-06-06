@@ -3,8 +3,6 @@ package dev.cafeteria.artofalchemy.block;
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityDissolverPlus;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -15,7 +13,7 @@ import net.minecraft.world.World;
 
 public class BlockDissolverPlus extends BlockDissolver {
 
-	public static final Settings SETTINGS = Settings.of(Material.METAL).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.create().strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockDissolver.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -35,12 +33,11 @@ public class BlockDissolverPlus extends BlockDissolver {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.DISSOLVER_PLUS,
-			(world2, pos, state2, entity) -> ((BlockEntityDissolverPlus) entity)
-				.tick(world2, pos, state2, (BlockEntityDissolverPlus) entity)
-		);
+		if(type == AoABlockEntities.DISSOLVER_PLUS)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntityDissolverPlus)blockEntity)
+					.tick(world1, pos, state1, (BlockEntityDissolverPlus)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 }

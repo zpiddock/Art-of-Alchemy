@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 public class BlockDistiller extends BlockWithEntity {
 
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Settings SETTINGS = Settings.of(Material.STONE).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.copy(Blocks.STONE).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockDistiller.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -93,12 +93,11 @@ public class BlockDistiller extends BlockWithEntity {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.DISTILLER,
-			(world2, pos, state2, entity) -> ((BlockEntityDistiller) entity)
-				.tick(world2, pos, state2, (BlockEntityDistiller) entity)
-		);
+		if(type == AoABlockEntities.DISTILLER)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntityDistiller)blockEntity)
+					.tick(world1, pos, state1, (BlockEntityDistiller)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 	@Override

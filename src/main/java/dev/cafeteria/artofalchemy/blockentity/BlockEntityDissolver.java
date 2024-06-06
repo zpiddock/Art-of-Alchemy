@@ -33,6 +33,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -315,9 +316,9 @@ public class BlockEntityDissolver extends BlockEntity
 			} else if (!this.hasAlkahest()) {
 				this.updateStatus(2);
 			} else {
-				final RecipeDissolution recipe = world.getRecipeManager().getFirstMatch(AoARecipes.DISSOLUTION, this, world)
+				final RecipeEntry<RecipeDissolution> recipe = world.getRecipeManager().getFirstMatch(AoARecipes.DISSOLUTION, this, world)
 					.orElse(null);
-				canWork = this.canCraft(recipe);
+				canWork = recipe != null && this.canCraft(recipe.value());
 
 				if (canWork) {
 					if (this.progress < this.maxProgress) {
@@ -329,7 +330,7 @@ public class BlockEntityDissolver extends BlockEntity
 					}
 					if (this.progress >= this.maxProgress) {
 						this.progress -= this.maxProgress;
-						this.doCraft(recipe);
+						this.doCraft(recipe.value());
 						if (!this.hasAlkahest()) {
 							world.setBlockState(pos, world.getBlockState(pos).with(BlockDissolver.FILLED, false));
 						}

@@ -36,16 +36,16 @@ public class AoARecipes {
 
 	public static void registerRecipes() {
 		AoARecipes.CALCINATION = AoARecipes.register("calcination");
-		AoARecipes.CALCINATION_SERIALIZER = AoARecipes.register("calcination", new SerializerCalcination());
+		AoARecipes.CALCINATION_SERIALIZER = AoARecipes.register("calcination", new SerializerCalcination(RecipeCalcination::new));
 
 		AoARecipes.DISSOLUTION = AoARecipes.register("dissolution");
-		AoARecipes.DISSOLUTION_SERIALIZER = AoARecipes.register("dissolution", new SerializerDissolution());
+		AoARecipes.DISSOLUTION_SERIALIZER = AoARecipes.register("dissolution", new SerializerDissolution(RecipeDissolution::new));
 
 		AoARecipes.SYNTHESIS = AoARecipes.register("synthesis");
-		AoARecipes.SYNTHESIS_SERIALIZER = AoARecipes.register("synthesis", new SerializerSynthesis());
+		AoARecipes.SYNTHESIS_SERIALIZER = AoARecipes.register("synthesis", new SerializerSynthesis(RecipeSynthesis::new));
 
 		AoARecipes.PROJECTION = AoARecipes.register("projection");
-		AoARecipes.PROJECTION_SERIALIZER = AoARecipes.register("projection", new SerializerProjection());
+		AoARecipes.PROJECTION_SERIALIZER = AoARecipes.register("projection", new SerializerProjection(RecipeProjection::new));
 	}
 
 }

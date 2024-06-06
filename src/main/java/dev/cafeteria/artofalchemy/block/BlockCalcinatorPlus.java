@@ -3,8 +3,6 @@ package dev.cafeteria.artofalchemy.block;
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.blockentity.BlockEntityCalcinatorPlus;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -16,7 +14,7 @@ import net.minecraft.world.World;
 
 public class BlockCalcinatorPlus extends BlockCalcinator {
 
-	public static final Settings SETTINGS = Settings.of(Material.METAL).sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.create().sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockCalcinator.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -36,12 +34,11 @@ public class BlockCalcinatorPlus extends BlockCalcinator {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.CALCINATOR_PLUS,
-			(world2, pos, state2, entity) -> ((BlockEntityCalcinatorPlus) entity)
-				.tick(world2, pos, state2, (BlockEntityCalcinatorPlus) entity)
-		);
+		if(type == AoABlockEntities.CALCINATOR_PLUS)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntityCalcinatorPlus)blockEntity)
+					.tick(world1, pos, state1, (BlockEntityCalcinatorPlus)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 }

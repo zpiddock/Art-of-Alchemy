@@ -2,22 +2,23 @@ package dev.cafeteria.artofalchemy.recipe;
 
 import dev.cafeteria.artofalchemy.block.AoABlocks;
 import dev.cafeteria.artofalchemy.essentia.EssentiaStack;
+import dev.cafeteria.artofalchemy.item.ItemMateria;
 import dev.cafeteria.artofalchemy.util.AoAHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
 public class RecipeSynthesis implements Recipe<Inventory> {
 
-	protected final Identifier id;
 	protected final String group;
 	protected final Ingredient target;
 	protected final Ingredient materia;
@@ -26,11 +27,9 @@ public class RecipeSynthesis implements Recipe<Inventory> {
 	protected final int cost;
 	protected final int tier;
 
-	public RecipeSynthesis(
-		final Identifier id, final String group, final Ingredient target, final Ingredient materia,
+	public RecipeSynthesis(final String group, final Ingredient target, final Ingredient materia,
 		final EssentiaStack essentia, final Ingredient container, final int cost, final int tier
 	) {
-		this.id = id;
 		this.group = group;
 		this.target = target;
 		this.materia = materia;
@@ -75,17 +74,12 @@ public class RecipeSynthesis implements Recipe<Inventory> {
 		return this.group;
 	}
 
-	@Override
-	public Identifier getId() {
-		return this.id;
-	}
-
 	public Ingredient getMateria() {
 		return this.materia;
 	}
 
 	@Override
-	public ItemStack getOutput(DynamicRegistryManager manager) {
+	public ItemStack getResult(DynamicRegistryManager manager) {
 		return ItemStack.EMPTY;
 	}
 
@@ -95,7 +89,15 @@ public class RecipeSynthesis implements Recipe<Inventory> {
 	}
 
 	public int getTier() {
-		return this.tier;
+
+		if(this.tier != -1 && !materia.isEmpty())
+			return this.tier;
+
+		final Item item = Registries.ITEM.get(materia.getMatchingItemIds().getInt(0));
+		if (item instanceof ItemMateria) {
+			return ((ItemMateria) item).getTier();
+		}
+		return -1;
 	}
 
 	@Override

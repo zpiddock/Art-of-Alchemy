@@ -28,6 +28,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -103,7 +104,7 @@ public class BlockEntityProjector extends BlockEntity
 		if ((recipe == null) || inSlot.isEmpty()) {
 			return false;
 		} else {
-			final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
+			final ItemStack outStack = recipe.getResult(getWorld().getRegistryManager());
 			final int alkCost = recipe.getAlkahest();
 			final int itemCost = recipe.getCost();
 
@@ -139,7 +140,7 @@ public class BlockEntityProjector extends BlockEntity
 		final ItemStack inSlot = this.items.get(0);
 		final ItemStack outSlot = this.items.get(1);
 
-		final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
+		final ItemStack outStack = recipe.getResult(getWorld().getRegistryManager());
 
 		inSlot.decrement(recipe.getCost());
 		this.mBAddAlkahest(-recipe.getAlkahest());
@@ -235,9 +236,9 @@ public class BlockEntityProjector extends BlockEntity
 			if (inSlot.isEmpty() || !this.hasAlkahest()) {
 				canWork = false;
 			} else {
-				final RecipeProjection recipe = world.getRecipeManager().getFirstMatch(AoARecipes.PROJECTION, this, world)
+				final RecipeEntry<RecipeProjection> recipe = world.getRecipeManager().getFirstMatch(AoARecipes.PROJECTION, this, world)
 					.orElse(null);
-				canWork = this.canCraft(recipe);
+				canWork = recipe != null && this.canCraft(recipe.value());
 
 				if (canWork) {
 					if (this.progress < this.maxProgress) {
@@ -249,7 +250,7 @@ public class BlockEntityProjector extends BlockEntity
 					}
 					if (this.progress >= this.maxProgress) {
 						this.progress -= this.maxProgress;
-						this.doCraft(recipe);
+						this.doCraft(recipe.value());
 					}
 				}
 			}

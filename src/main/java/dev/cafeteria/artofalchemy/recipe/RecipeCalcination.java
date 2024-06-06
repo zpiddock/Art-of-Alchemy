@@ -10,23 +10,19 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class RecipeCalcination implements Recipe<Inventory> {
 
-	protected final Identifier id;
 	protected final String group;
 	protected final Ingredient input;
 	protected final ItemStack output;
 	protected final float factor;
 	protected final ItemStack container;
 
-	public RecipeCalcination(
-		final Identifier id, final String group, final Ingredient input, final ItemStack output, final float factor,
+	public RecipeCalcination(final String group, final Ingredient input, final ItemStack output, final float factor,
 		final ItemStack container
 	) {
-		this.id = id;
 		this.group = group;
 		this.input = input;
 		this.factor = factor;
@@ -34,10 +30,9 @@ public class RecipeCalcination implements Recipe<Inventory> {
 		this.container = container;
 	}
 
-	public RecipeCalcination(
-		final Identifier id, final String group, final Ingredient input, final ItemStack output, final ItemStack container
+	public RecipeCalcination(final String group, final Ingredient input, final ItemStack output, final ItemStack container
 	) {
-		this(id, group, input, output, 1.0f, container);
+		this(group, input, output, 1.0f, container);
 	}
 
 	@Override
@@ -58,7 +53,7 @@ public class RecipeCalcination implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+	public ItemStack getResult(DynamicRegistryManager registryManager) {
 		return this.output;
 	}
 
@@ -74,11 +69,6 @@ public class RecipeCalcination implements Recipe<Inventory> {
 	@Environment(EnvType.CLIENT)
 	public String getGroup() {
 		return this.group;
-	}
-
-	@Override
-	public Identifier getId() {
-		return this.id;
 	}
 
 	public Ingredient getInput() {

@@ -10,23 +10,19 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class RecipeProjection implements Recipe<Inventory> {
 
-	protected final Identifier id;
 	protected final String group;
 	protected final Ingredient input;
 	protected final int cost;
 	protected final ItemStack output;
 	protected final int alkahest;
 
-	public RecipeProjection(
-		final Identifier id, final String group, final Ingredient input, final int cost, final ItemStack output,
+	public RecipeProjection(final String group, final Ingredient input, final int cost, final ItemStack output,
 		final int alkahest
 	) {
-		this.id = id;
 		this.group = group;
 		this.input = input;
 		this.cost = cost;
@@ -65,17 +61,12 @@ public class RecipeProjection implements Recipe<Inventory> {
 		return this.group;
 	}
 
-	@Override
-	public Identifier getId() {
-		return this.id;
-	}
-
 	public Ingredient getInput() {
 		return this.input;
 	}
 
 	@Override
-	public ItemStack getOutput(DynamicRegistryManager manager) {
+	public ItemStack getResult(DynamicRegistryManager manager) {
 		return this.output;
 	}
 

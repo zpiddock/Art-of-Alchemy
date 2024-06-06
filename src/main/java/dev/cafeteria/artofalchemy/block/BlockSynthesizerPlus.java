@@ -1,10 +1,7 @@
 package dev.cafeteria.artofalchemy.block;
 
-import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
-import dev.cafeteria.artofalchemy.blockentity.BlockEntitySynthesizerPlus;
+import dev.cafeteria.artofalchemy.blockentity.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -15,7 +12,7 @@ import net.minecraft.world.World;
 
 public class BlockSynthesizerPlus extends BlockSynthesizer {
 
-	public static final Settings SETTINGS = Settings.of(Material.METAL).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.create().strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockSynthesizer.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -35,12 +32,11 @@ public class BlockSynthesizerPlus extends BlockSynthesizer {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.SYNTHESIZER_PLUS,
-			(world2, pos, state2, entity) -> ((BlockEntitySynthesizerPlus) entity)
-				.tick(world2, pos, state2, (BlockEntitySynthesizerPlus) entity)
-		);
+		if(type == AoABlockEntities.SYNTHESIZER_PLUS)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntitySynthesizerPlus)blockEntity)
+					.tick(world1, pos, state1, (BlockEntitySynthesizer)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 }

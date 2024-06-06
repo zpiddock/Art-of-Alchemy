@@ -7,7 +7,8 @@
   "authors": [
     "SynthRose",
     "Vaerian",
-    "Kyran"
+    "Kyran",
+    "shad0w"
   ],
   "contributors": [],
   "contact": {
@@ -35,7 +36,7 @@
   ],
   "accessWidener": "artofalchemy.widener",
   "depends": {
-    "minecraft": "~1.19.4",
+    "minecraft": "~1.20.2",
     "libgui": ">=4.1.2",
     "fabricloader": ">=0.11.6",
     "fabric": ">=0.40.1"

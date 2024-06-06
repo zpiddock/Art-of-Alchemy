@@ -1,16 +1,7 @@
 package dev.cafeteria.artofalchemy.transport;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.logging.log4j.Level;
-
 import dev.cafeteria.artofalchemy.AoAConfig;
 import dev.cafeteria.artofalchemy.ArtOfAlchemy;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -20,6 +11,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.dimension.DimensionType;
+import org.apache.logging.log4j.Level;
+
+import java.util.*;
 
 // Thanks, 2xsaiko!
 public class EssentiaNetworker extends PersistentState {
@@ -31,9 +25,17 @@ public class EssentiaNetworker extends PersistentState {
 
 	public static EssentiaNetworker get(final ServerWorld world) {
 		return world.getPersistentStateManager().getOrCreate(
-			tag -> EssentiaNetworker.fromNbt(world, tag),
-			() -> new EssentiaNetworker(world),
+			getType(world),
 			EssentiaNetworker.getName(world.getDimension())
+		);
+	}
+
+	private static PersistentState.Type<EssentiaNetworker> getType(final ServerWorld world) {
+
+		return new PersistentState.Type<>(
+				() -> new EssentiaNetworker(world),
+				(nbt) -> EssentiaNetworker.fromNbt(world, nbt),
+				null
 		);
 	}
 
@@ -130,20 +132,20 @@ public class EssentiaNetworker extends PersistentState {
 	}
 
 	public void readNbt(final NbtCompound tag) {
-		final NbtList networkList = tag.getList("networks", NbtType.LIST);
+		final NbtList networkList = tag.getList("networks", NbtElement.LIST_TYPE);
 		for (final NbtElement networkTag : networkList) {
 			if ((networkTag instanceof NbtList) && !((NbtList) networkTag).isEmpty()) {
 				this.networks.add(new EssentiaNetwork(this.world, (NbtList) networkTag));
 			}
 		}
-		final NbtList orphanList = tag.getList("orphans", NbtType.LIST);
+		final NbtList orphanList = tag.getList("orphans", NbtElement.LIST_TYPE);
 		for (final NbtElement orphanTag : orphanList) {
 			if (orphanTag instanceof final NbtList posTag) {
 				final BlockPos pos = new BlockPos(posTag.getInt(0), posTag.getInt(1), posTag.getInt(2));
 				this.orphans.add(pos.toImmutable());
 			}
 		}
-		final NbtList legacyList = tag.getList("network_positions", NbtType.LIST);
+		final NbtList legacyList = tag.getList("network_positions", NbtElement.LIST_TYPE);
 		for (final NbtElement orphanTag : legacyList) {
 			if (orphanTag instanceof final NbtList posTag) {
 				final BlockPos pos = new BlockPos(posTag.getInt(0), posTag.getInt(1), posTag.getInt(2));

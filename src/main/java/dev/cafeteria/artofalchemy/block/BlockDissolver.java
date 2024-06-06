@@ -37,7 +37,7 @@ public class BlockDissolver extends BlockWithEntity {
 
 	public static final BooleanProperty FILLED = BooleanProperty.of("filled");
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Settings SETTINGS = Settings.of(Material.STONE).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.copy(Blocks.STONE).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockDissolver.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -94,12 +94,11 @@ public class BlockDissolver extends BlockWithEntity {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.DISSOLVER,
-			(world2, pos, state2, entity) -> ((BlockEntityDissolver) entity)
-				.tick(world2, pos, state2, (BlockEntityDissolver) entity)
-		);
+		if(type == AoABlockEntities.DISSOLVER)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntityDissolver)blockEntity)
+					.tick(world1, pos, state1, (BlockEntityDissolver)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 	@Override

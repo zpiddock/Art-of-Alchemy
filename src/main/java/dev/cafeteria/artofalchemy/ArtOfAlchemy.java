@@ -1,9 +1,15 @@
 package dev.cafeteria.artofalchemy;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import dev.cafeteria.artofalchemy.block.AoABlocks;
 import dev.cafeteria.artofalchemy.blockentity.AoABlockEntities;
 import dev.cafeteria.artofalchemy.dispenser.AoADispenserBehavior;
 import dev.cafeteria.artofalchemy.essentia.AoAEssentia;
+import dev.cafeteria.artofalchemy.essentia.EssentiaStack;
 import dev.cafeteria.artofalchemy.fluid.AoAFluids;
 import dev.cafeteria.artofalchemy.gui.handler.AoAHandlers;
 import dev.cafeteria.artofalchemy.item.AoAItems;
@@ -19,6 +25,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.Level;
@@ -32,7 +40,7 @@ public class ArtOfAlchemy implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger(ArtOfAlchemy.MOD_NAME);
 
-	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroup.builder(ArtOfAlchemy.id(MOD_ID))
+	public static final ItemGroup ALCHEMY_GROUP = FabricItemGroup.builder()
 			.displayName(Text.translatable("itemGroup.artofalchemy.alchemy"))
 			.icon(() -> new ItemStack(AoAItems.MYSTERIOUS_SIGIL))
 			.build();
@@ -47,6 +55,7 @@ public class ArtOfAlchemy implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+
 		ArtOfAlchemy.log(
 			Level.INFO,
 			"Humankind cannot gain anything without first giving something in return. "
@@ -65,12 +74,44 @@ public class ArtOfAlchemy implements ModInitializer {
 		AoADispenserBehavior.registerDispenserBehavior();
 		AoANetworking.initializeNetworking();
 		AoALoot.initialize();
-//		Registry.register(Registries.ITEM_GROUP, id("alchemy"), ALCHEMY_GROUP);
+		Registry.register(Registries.ITEM_GROUP, id("alchemy"), ALCHEMY_GROUP);
 		ServerTickEvents.END_WORLD_TICK.register(world -> {
 			if (!world.isClient()) {
 				EssentiaNetworker.get(world).tick();
 			}
 		});
+
+//		runTestsAndCrash();
+	}
+
+	private void runTestsAndCrash() {
+
+		// Example JSON data
+		String jsonData = "{\"artofalchemy:tellus\":4,\"artofalchemy:saturn\":2}";
+		JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
+
+		// Deserialize
+		System.out.println("Deserializing JSON: " + jsonObject); // Debug
+		DataResult<EssentiaStack> result = EssentiaStack.CODEC.parse(JsonOps.INSTANCE, jsonObject);
+		EssentiaStack essentiaStack = result.resultOrPartial(System.err::println).orElse(null);
+
+		if (essentiaStack != null) {
+			System.out.println("Deserialized: " + essentiaStack);
+		} else {
+			System.err.println("Deserialization failed");
+		}
+
+		// Serialize
+		DataResult<JsonElement> serialized = EssentiaStack.CODEC.encodeStart(JsonOps.INSTANCE, essentiaStack);
+		JsonObject serializedJson = serialized.resultOrPartial(System.err::println).orElse(null).getAsJsonObject();
+
+		if (serializedJson != null) {
+			System.out.println("Serialized: " + serializedJson);
+		} else {
+			System.err.println("Serialization failed");
+		}
+
+		throw new RuntimeException("Did it work?");
 	}
 
 }

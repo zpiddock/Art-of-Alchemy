@@ -31,6 +31,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -277,12 +278,12 @@ public class BlockEntitySynthesizer extends BlockEntity
 	}
 
 	public EssentiaStack getRequirements() {
-		final RecipeSynthesis recipe = this.world.getRecipeManager().getFirstMatch(AoARecipes.SYNTHESIS, this, this.world)
+		final RecipeEntry<RecipeSynthesis> recipe = this.world.getRecipeManager().getFirstMatch(AoARecipes.SYNTHESIS, this, this.world)
 			.orElse(null);
 		if ((recipe == null) || this.items.get(2).isEmpty()) {
 			return new EssentiaStack();
 		} else {
-			return recipe.getEssentia();
+			return recipe.value().getEssentia();
 		}
 	}
 
@@ -345,10 +346,10 @@ public class BlockEntitySynthesizer extends BlockEntity
 			if (targetSlot.isEmpty()) {
 				this.updateStatus(2);
 			} else {
-				final RecipeSynthesis recipe = world.getRecipeManager().getFirstMatch(AoARecipes.SYNTHESIS, this, world)
+				final RecipeEntry<RecipeSynthesis> recipe = world.getRecipeManager().getFirstMatch(AoARecipes.SYNTHESIS, this, world)
 					.orElse(null);
 
-				if (this.canCraft(recipe)) {
+				if (recipe != null && this.canCraft(recipe.value())) {
 					isWorking = true;
 				}
 
@@ -362,7 +363,7 @@ public class BlockEntitySynthesizer extends BlockEntity
 					}
 					if (this.progress >= this.maxProgress) {
 						this.progress -= this.maxProgress;
-						this.doCraft(recipe);
+						this.doCraft(recipe.value());
 						dirty = true;
 					}
 				}

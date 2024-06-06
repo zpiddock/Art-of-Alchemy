@@ -24,7 +24,7 @@ public class BlockCalcinator extends BlockWithEntity {
 
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Settings SETTINGS = Settings.of(Material.STONE).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.copy(Blocks.STONE).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockCalcinator.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {
@@ -66,12 +66,11 @@ public class BlockCalcinator extends BlockWithEntity {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.CALCINATOR,
-			(world2, pos, state2, entity) -> ((BlockEntityCalcinator) entity)
-				.tick(world2, pos, state2, (BlockEntityCalcinator) entity)
-		);
+		if(type == AoABlockEntities.CALCINATOR)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntityCalcinator)blockEntity)
+					.tick(world1, pos, state1, (BlockEntityCalcinator) blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 	@Override

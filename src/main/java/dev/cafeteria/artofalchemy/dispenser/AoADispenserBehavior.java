@@ -15,15 +15,15 @@ import net.minecraft.util.math.Direction;
 public class AoADispenserBehavior {
 
 	protected static final DispenserBehavior VESSEL_BEHAVIOR = (pointer, stack) -> {
-		final Direction facing = pointer.getBlockState().get(DispenserBlock.FACING);
-		final BlockEntity be = pointer.getWorld().getBlockEntity(pointer.getPos().offset(facing));
+		final Direction facing = pointer.state().get(DispenserBlock.FACING);
+		final BlockEntity be = pointer.world().getBlockEntity(pointer.pos().offset(facing));
 		ItemEssentiaVessel.useStackOnBE(stack, be);
 		return stack;
 	};
 
 	protected static final DispenserBehavior ALKAHEST_BEHAVIOR = (pointer, stack) -> {
-		final Direction facing = pointer.getBlockState().get(DispenserBlock.FACING);
-		final BlockEntity be = pointer.getWorld().getBlockEntity(pointer.getPos().offset(facing));
+		final Direction facing = pointer.state().get(DispenserBlock.FACING);
+		final BlockEntity be = pointer.world().getBlockEntity(pointer.pos().offset(facing));
 		if (be instanceof HasAlkahest) {
 			final boolean successful = ((HasAlkahest) be).addAlkahest(1000);
 			if (successful && be.getWorld() != null) {

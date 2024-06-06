@@ -23,8 +23,8 @@ public class WEssentiaSubPanel extends WPlainPanel {
 
 		@Environment(EnvType.CLIENT)
 		@Override
-		public InputResult onMouseScroll(final int x, final int y, final double amount) {
-			this.parent.onMouseScroll(-1, -1, amount);
+		public InputResult onMouseScroll(final int x, final int y, final double horizontalAmount, final double verticalAmount) {
+			this.parent.onMouseScroll(-1, -1, horizontalAmount, verticalAmount);
 			return InputResult.PROCESSED;
 		}
 
@@ -41,8 +41,8 @@ public class WEssentiaSubPanel extends WPlainPanel {
 
 		@Environment(EnvType.CLIENT)
 		@Override
-		public InputResult onMouseScroll(final int x, final int y, final double amount) {
-			this.parent.onMouseScroll(-1, -1, amount);
+		public InputResult onMouseScroll(final int x, final int y, final double horizontalAmount, final double verticalAmount) {
+			this.parent.onMouseScroll(-1, -1, horizontalAmount, verticalAmount);
 			return InputResult.PROCESSED;
 		}
 
@@ -84,8 +84,8 @@ public class WEssentiaSubPanel extends WPlainPanel {
 
 	@Environment(EnvType.CLIENT)
 	@Override
-	public InputResult onMouseScroll(final int x, final int y, final double amount) {
-		this.parent.onMouseScroll(-1, -1, amount);
+	public InputResult onMouseScroll(final int x, final int y, final double horizontalAmount, final double verticalAmount) {
+		this.parent.onMouseScroll(-1, -1, horizontalAmount, verticalAmount);
 		return InputResult.PROCESSED;
 	}
 

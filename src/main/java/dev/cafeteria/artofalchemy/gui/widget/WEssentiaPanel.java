@@ -1,12 +1,5 @@
 package dev.cafeteria.artofalchemy.gui.widget;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import dev.cafeteria.artofalchemy.essentia.Essentia;
 import dev.cafeteria.artofalchemy.essentia.EssentiaContainer;
 import dev.cafeteria.artofalchemy.essentia.EssentiaStack;
@@ -14,6 +7,9 @@ import io.github.cottonmc.cotton.gui.widget.WListPanel;
 import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class WEssentiaPanel extends WListPanel<Essentia, WEssentiaSubPanel> {
 
@@ -41,11 +37,13 @@ public class WEssentiaPanel extends WListPanel<Essentia, WEssentiaSubPanel> {
 		this.updateEssentia(container, required);
 	}
 
+
+
 	@Environment(EnvType.CLIENT)
 	@Override
-	public InputResult onMouseScroll(final int x, final int y, final double amount) {
+	public InputResult onMouseScroll(final int x, final int y, final double horizontalAmount, final double verticalAmount) {
 		// Pass this as a fake event to the scrollbar for centralized scroll handling
-		this.scrollBar.onMouseScroll(-1, -1, amount);
+		this.scrollBar.onMouseScroll(-1, -1, horizontalAmount, verticalAmount);
 		return InputResult.PROCESSED;
 	}
 

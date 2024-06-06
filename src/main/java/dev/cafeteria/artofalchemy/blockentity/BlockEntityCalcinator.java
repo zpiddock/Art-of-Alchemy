@@ -119,7 +119,7 @@ public class BlockEntityCalcinator extends BlockEntity
 		if ((recipe == null) || inSlot.isEmpty()) {
 			return false;
 		} else {
-			final ItemStack outStack = recipe.getOutput(getWorld().getRegistryManager());
+			final ItemStack outStack = recipe.getResult(getWorld().getRegistryManager());
 			final ItemStack container = recipe.getContainer();
 
 			float factor = this.getYield() * recipe.getFactor();
@@ -165,7 +165,7 @@ public class BlockEntityCalcinator extends BlockEntity
 	private void doCraft(final RecipeCalcination recipe) {
 		final ItemStack inSlot = this.items.get(0);
 		final ItemStack outSlot = this.items.get(2);
-		final ItemStack outStack = recipe.getOutput(this.world.getRegistryManager());
+		final ItemStack outStack = recipe.getResult(this.world.getRegistryManager());
 		final ItemStack container = recipe.getContainer();
 
 		float factor = this.getYield() * recipe.getFactor();
@@ -282,7 +282,7 @@ public class BlockEntityCalcinator extends BlockEntity
 
 			if (!inSlot.isEmpty() && (this.isBurning() || FuelHelper.isFuel(fuelSlot))) {
 				final RecipeCalcination recipe = world.getRecipeManager().getFirstMatch(AoARecipes.CALCINATION, this, world)
-					.orElse(null);
+					.orElse(null).value();
 				final boolean craftable = this.canCraft(recipe);
 
 				if (!this.isBurning()) {

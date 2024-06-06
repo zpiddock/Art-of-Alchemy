@@ -1,21 +1,47 @@
 package dev.cafeteria.artofalchemy.essentia;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import dev.cafeteria.artofalchemy.util.AoAHelper;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.*;
+
 @SuppressWarnings("serial")
 public class EssentiaStack extends HashMap<Essentia, Integer> {
+
+	public static final Codec<EssentiaStack> CODEC = getCodec();
+
+	private static Codec<EssentiaStack> getCodec() {
+
+		return Codec.unboundedMap(Identifier.CODEC, Codec.INT).comapFlatMap(
+				map -> {
+					EssentiaStack stack = new EssentiaStack();
+					for (Map.Entry<Identifier, Integer> entry : map.entrySet()) {
+						System.out.println("Attempting to get Essentia for Identifier: " + entry.getKey()); // Debug
+						Essentia essentia = RegistryEssentia.INSTANCE.get(entry.getKey());
+						if (essentia == null) {
+							return DataResult.error(() -> "Unknown essentia: " + entry.getKey());
+						}
+						stack.put(essentia, entry.getValue());
+					}
+					return DataResult.success(stack);
+				},
+				stack -> {
+					Map<Identifier, Integer> map = new HashMap<>();
+					for (Map.Entry<Essentia, Integer> entry : stack.entrySet()) {
+						Identifier id = RegistryEssentia.INSTANCE.getId(entry.getKey());
+						System.out.println("Got Identifier for Essentia: " + id); // Debug
+						map.put(id, entry.getValue());
+					}
+					return map;
+				}
+		);
+	}
 
 	// Non-mutating addition.
 	public static EssentiaStack add(final EssentiaStack stack1, final EssentiaStack stack2) {
@@ -64,6 +90,20 @@ public class EssentiaStack extends HashMap<Essentia, Integer> {
 	}
 
 	public EssentiaStack() {
+	}
+
+	public EssentiaStack(Map<String, Integer> idCountMap) {
+
+		idCountMap.forEach((id, count) -> {
+
+			Essentia essentia = RegistryEssentia.INSTANCE.get(Identifier.tryParse(id));
+			if (essentia != null) {
+
+				this.put(essentia, count);
+			} else {
+				throw new JsonSyntaxException("Unknown essentia '" + id + "'");
+			}
+		});
 	}
 
 	public EssentiaStack(final JsonObject obj) {
@@ -181,5 +221,4 @@ public class EssentiaStack extends HashMap<Essentia, Integer> {
 		}
 		return tag;
 	}
-
 }

@@ -84,12 +84,11 @@ public class BlockSynthesizer extends BlockWithEntity {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
 		final World world, final BlockState state, final BlockEntityType<T> type
 	) {
-		return BlockWithEntity.checkType(
-			type,
-			AoABlockEntities.SYNTHESIZER,
-			(world2, pos, state2, entity) -> ((BlockEntitySynthesizer) entity)
-				.tick(world2, pos, state2, (BlockEntitySynthesizer) entity)
-		);
+		if(type == AoABlockEntities.SYNTHESIZER)
+			return ((world1, pos, state1, blockEntity) -> ((BlockEntitySynthesizer)blockEntity)
+					.tick(world1, pos, state1, (BlockEntitySynthesizer)blockEntity));
+
+		return super.getTicker(world, state, type);
 	}
 
 	@Override

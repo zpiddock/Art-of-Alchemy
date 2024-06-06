@@ -11,23 +11,19 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class RecipeDissolution implements Recipe<Inventory> {
 
-	protected final Identifier id;
 	protected final String group;
 	protected final Ingredient input;
 	protected final EssentiaStack essentia;
 	protected final float factor;
 	protected final ItemStack container;
 
-	public RecipeDissolution(
-		final Identifier id, final String group, final Ingredient input, final EssentiaStack essentia, final float factor,
+	public RecipeDissolution(final String group, final Ingredient input, final EssentiaStack essentia, final float factor,
 		final ItemStack container
 	) {
-		this.id = id;
 		this.group = group;
 		this.input = input;
 		this.essentia = essentia;
@@ -35,11 +31,10 @@ public class RecipeDissolution implements Recipe<Inventory> {
 		this.container = container;
 	}
 
-	public RecipeDissolution(
-		final Identifier id, final String group, final Ingredient input, final EssentiaStack essentia,
+	public RecipeDissolution(final String group, final Ingredient input, final EssentiaStack essentia,
 		final ItemStack container
 	) {
-		this(id, group, input, essentia, 1.0f, container);
+		this(group, input, essentia, 1.0f, container);
 	}
 
 	@Override
@@ -64,7 +59,7 @@ public class RecipeDissolution implements Recipe<Inventory> {
 	}
 
 	public EssentiaStack getEssentia() {
-		return (EssentiaStack) this.essentia.clone();
+		return (EssentiaStack) essentia.clone();
 	}
 
 	public float getFactor() {
@@ -77,17 +72,12 @@ public class RecipeDissolution implements Recipe<Inventory> {
 		return this.group;
 	}
 
-	@Override
-	public Identifier getId() {
-		return this.id;
-	}
-
 	public Ingredient getInput() {
 		return this.input;
 	}
 
 	@Override
-	public ItemStack getOutput(DynamicRegistryManager manager) {
+	public ItemStack getResult(DynamicRegistryManager manager) {
 		return ItemStack.EMPTY;
 	}
 

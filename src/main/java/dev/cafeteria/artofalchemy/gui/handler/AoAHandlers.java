@@ -66,7 +66,7 @@ public class AoAHandlers {
 		return (syncId, inventory, buf) -> {
 			try {
 				return klass.getDeclaredConstructor(int.class, PlayerInventory.class, ScreenHandlerContext.class)
-					.newInstance(syncId, inventory, ScreenHandlerContext.create(inventory.player.world, buf.readBlockPos()));
+					.newInstance(syncId, inventory, ScreenHandlerContext.create(inventory.player.getWorld(), buf.readBlockPos()));
 			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();
 				return null;

@@ -28,7 +28,7 @@ public abstract class MixinRecipeManager {
 		final RecipeType<T> recipeType, final C inventory, final World world,
 		final CallbackInfoReturnable<DefaultedList<ItemStack>> info, final Optional<T> optional
 	) {
-		if (optional.get().getOutput(world.getRegistryManager()).getItem() == AoAItems.ALKAHEST_BUCKET) {
+		if (optional.isPresent() && optional.get().getResult(world.getRegistryManager()).getItem() == AoAItems.ALKAHEST_BUCKET) {
 			info.setReturnValue(DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY));
 		}
 	}

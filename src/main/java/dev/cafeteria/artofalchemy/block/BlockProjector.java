@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 public class BlockProjector extends BlockWithEntity {
 
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Settings SETTINGS = Settings.of(Material.METAL).sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f)
+	public static final Settings SETTINGS = Settings.create().sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f)
 		.luminance(state -> state.get(BlockProjector.LIT) ? 15 : 0).nonOpaque();
 
 	public static Identifier getId() {

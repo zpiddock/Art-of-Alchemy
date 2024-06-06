@@ -168,5 +168,7 @@
 	"text.autoconfig.artofalchemy.option.synthesizerSettings.tankPlus": "Tank size (Upgraded)",
 	"text.autoconfig.artofalchemy.option.projectorSettings": "Projection Altar",
 	"text.autoconfig.artofalchemy.option.projectorSettings.opTime": "Operation time",
-	"text.autoconfig.artofalchemy.option.projectorSettings.tankSize": "Tank size"
+	"text.autoconfig.artofalchemy.option.projectorSettings.tankSize": "Tank size",
+
+	"tags.artofalchemy.items.formulae": "Formulae"
 }
